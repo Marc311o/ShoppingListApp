@@ -8,9 +8,7 @@
 
    <Button fx:id="loginBtn" layoutX="133.0" layoutY="253.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Zaloguj" />
 
-   <Label fx:id="usernameLabel" alignment="CENTER" layoutX="1.0" layoutY="191.0" prefHeight="18.0" prefWidth="413.0" text="Nazwa użytkownika" />
-
-   <TextField fx:id="loginUsernameForm" layoutX="106.0" layoutY="209.0" prefHeight="26.0" prefWidth="204.0" />
+   <TextField fx:id="loginUsernameForm" layoutX="106.0" layoutY="209.0" prefHeight="26.0" prefWidth="204.0" promptText="nazwa użytkownika" />
 
    <Label fx:id="loginErrorMessage" alignment="CENTER" layoutX="1.0" layoutY="235.0" prefHeight="18.0" prefWidth="400.0" text="Nieprawidłowa nazwa użytkownika" />
 

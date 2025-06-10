@@ -1,6 +1,4 @@
-/* Styl dla przycisku "Zaloguj" */
-
-#loginBtn {
+#myListsButton, #availableProductsBtn {
     -fx-layout-x: 131.0;
     -fx-layout-y: 269.0;
     -fx-pref-height: 26.0;
@@ -12,18 +10,7 @@
     /*-fx-border-radius: 5;*/
 }
 
-#loginBtn:hover{
+#myListsButton:hover, #availableProductsBtn:hover{
     -fx-cursor: hand;
     -fx-background-color: #218838 ;
-}
-
-
-#loginErrorMessage {
-    -fx-alignment: center;
-    -fx-layout-x: -1.0;
-    -fx-layout-y: 243.0;
-    -fx-pref-height: 18.0;
-    -fx-pref-width: 413.0;
-    -fx-text-fill: red;
-    -fx-opacity: 0;
 }
