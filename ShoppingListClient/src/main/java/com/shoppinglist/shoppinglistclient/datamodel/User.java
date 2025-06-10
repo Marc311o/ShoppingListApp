@@ -85,4 +85,8 @@ public class User {
             productLists.add(list);
         }
     }
+
+    public void addProductList(ProductsList list) {
+        productLists.add(list);
+    }
 }
