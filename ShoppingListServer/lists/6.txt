@@ -1,0 +1,7 @@
+6;roczna
+
+Chemia;Tabletki do zmywarki;sztuki;int;100
+Chemia;Środek do czyszczenia łazienek;mililitry;double;500.0
+
+Motoryzacja;Akumulator;sztuki;int;1
+Motoryzacja;Zestaw żarówek;sztuki;int;10

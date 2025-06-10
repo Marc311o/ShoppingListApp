@@ -1,0 +1,7 @@
+3;tygodniowa
+
+Chemia;Szampon;sztuki;int;2
+Chemia;Mydło;sztuki;int;3
+
+Motoryzacja;Olej silnikowy;litry;double;4.0
+Motoryzacja;Środek do czyszczenia szyb;mililitry;double;250.0

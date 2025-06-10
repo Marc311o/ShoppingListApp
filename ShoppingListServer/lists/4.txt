@@ -1,0 +1,7 @@
+4;miesięczna
+
+Chemia;Płyn do naczyń;litry;double;1.0
+Chemia;Żel pod prysznic;sztuki;int;1
+
+Motoryzacja;Wosk do karoserii;sztuki;int;1
+Motoryzacja;Płyn chłodniczy;litry;double;5.0
