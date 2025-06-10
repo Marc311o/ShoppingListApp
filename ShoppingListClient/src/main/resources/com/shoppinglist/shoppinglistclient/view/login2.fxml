@@ -1,0 +1,25 @@
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+
+    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../../../icon.png" />
+    </ImageView>
+
+    <Label fx:id="usernameLabel" alignment="CENTER" prefHeight="18.0" prefWidth="600.0" text="Nazwa użytkownika" />
+    <TextField fx:id="loginUsernameForm" prefWidth="150" promptText="enter username" />
+    <Label fx:id="loginErrorMessage" alignment="CENTER" prefHeight="18.0" prefWidth="600.0" text="Nieprawidłowa nazwa użytkownika" />
+
+
+    <Button fx:id="loginBtn" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Zaloguj" />
+
+
+</VBox>
+
+<!-- rejected -->
