@@ -3,7 +3,7 @@ package datamodel;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ProductsList {
+public class ProductsList implements Serializable {
 
     private int id;
     private String name;

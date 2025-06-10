@@ -1,6 +1,8 @@
 package com.shoppinglist.shoppinglistclient.datamodel;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
 
     private String name, category, unit, type;
     private double amount;

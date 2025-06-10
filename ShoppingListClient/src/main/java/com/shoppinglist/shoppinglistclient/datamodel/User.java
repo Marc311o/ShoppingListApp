@@ -3,9 +3,10 @@ package com.shoppinglist.shoppinglistclient.datamodel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
 
     private String name;
     final private int id;
@@ -20,6 +21,7 @@ public class User {
         this.productLists = new ArrayList<>();
 
     }
+
 
     public String getName() {
         return name;
