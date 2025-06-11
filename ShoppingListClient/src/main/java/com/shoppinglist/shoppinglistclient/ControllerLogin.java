@@ -19,7 +19,6 @@ public class ControllerLogin {
 
     private Stage stage;
     private Scene scene;
-    private Parent root;
 
     @FXML
     private Button loginBtn;
@@ -34,21 +33,26 @@ public class ControllerLogin {
     }
 
     public void clickLoginBtn(ActionEvent e) {
+
         String username = loginUsernameForm.getText();
         User user = ConnectionHandler.getUser(username);
         if (user != null) {
             loginErrorMessage.setText("");
             try {
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/menu.fxml")));
-                stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+                Main.currentUserName = username;
+                stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
 
-            } catch (IOException ex) { throw new RuntimeException(ex); }
-        }else{
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
             loginErrorMessage.setText("Nieprawidłowa nazwa użytkownika");
         }
+
     }
 
 }

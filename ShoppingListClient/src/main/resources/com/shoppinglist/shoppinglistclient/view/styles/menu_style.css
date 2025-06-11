@@ -1,4 +1,4 @@
-#myListsButton, #availableProductsBtn {
+#myListsBtn, #availableProductsBtn {
     -fx-pref-height: 26.0;
     -fx-pref-width: 150.0;
 
@@ -8,7 +8,7 @@
     /*-fx-border-radius: 5;*/
 }
 
-#myListsButton:hover, #availableProductsBtn:hover{
+#myListsBtn:hover, #availableProductsBtn:hover{
     -fx-cursor: hand;
     -fx-background-color: #218838 ;
 }
