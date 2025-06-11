@@ -1,14 +1,12 @@
 package com.shoppinglist.shoppinglistclient.datamodel;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class User {
 
     private String name;
-    final private int id;
+    private int id;
 
     private ArrayList<Integer> productListsID;
     private ArrayList<ProductsList> productLists;
@@ -21,6 +19,12 @@ public class User {
 
     }
 
+    public User() {
+        this.productListsID = new ArrayList<>();
+        this.productLists = new ArrayList<>();
+    }
+
+
     public String getName() {
         return name;
     }
@@ -31,6 +35,18 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ArrayList<ProductsList> getProductLists() {
+        return productLists;
+    }
+
+    public void setProductLists(ArrayList<ProductsList> productLists) {
+        this.productLists = productLists;
     }
 
     public ArrayList<Integer> getProductListsID() {
@@ -86,7 +102,21 @@ public class User {
         }
     }
 
-    public void addProductList(ProductsList list) {
-        productLists.add(list);
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("# # # # # # # # # # #\n");
+        sb.append("Name: " + name + "\n");
+        sb.append("ID: " + id + "\n");
+        sb.append("ProductListsID: " + productListsID + "\n");
+
+        int i = 1;
+        for (ProductsList list : productLists) {
+            sb.append(list.toString(i));
+            i++;
+        }
+        sb.append("# # # # # # # # # # #\n");
+        return sb.toString();
     }
+
 }

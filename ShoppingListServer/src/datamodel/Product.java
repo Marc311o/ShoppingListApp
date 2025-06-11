@@ -2,9 +2,9 @@ package datamodel;
 
 public class Product {
 
-    private String name, category, unit, type;
-    private double amount;
-    private int quantity;
+    public String name, category, unit, type;
+    public double amount;
+    public int quantity;
 
     public Product(String name, String category, String unit, String typ, double amount) {
         this.name = name;
@@ -14,7 +14,6 @@ public class Product {
         this.type = typ;
         this.quantity = (int) amount;
     }
-
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
@@ -48,6 +47,20 @@ public class Product {
         return this.unit;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
 
