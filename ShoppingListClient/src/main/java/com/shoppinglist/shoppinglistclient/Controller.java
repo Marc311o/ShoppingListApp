@@ -11,7 +11,9 @@ public class Controller {
 
     public void initialize() {
         User user = ConnectionHandler.getUser();
-//        welcomeText.setText("Welcome " + user.getName());
+
+
+        welcomeText.setText("Welcome " + user.getName());
 
     }
 }

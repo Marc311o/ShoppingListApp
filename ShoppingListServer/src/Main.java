@@ -1,9 +1,8 @@
 import datamodel.ProductsList;
 import datamodel.User;
+import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -18,19 +17,15 @@ public class Main {
     static final int SOCKET_PORT = 5000;
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
-
-
     public static void main(String[] args) {
-//        server data init
+        // Inicjalizacja danych
         users = User.readUsers("users.txt");
         for (User user : users) {
             user.readProductLists();
         }
         availableProductList.loadFromFile("lists/available.txt");
 
-
         try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT)) {
-
             System.out.println("Serwer nasłuchuje na porcie " + SOCKET_PORT);
 
             while (true) {
@@ -41,7 +36,6 @@ public class Main {
                     } catch (InterruptedException e) {
                         System.err.println("Błąd - przerwano wątek");
                     }
-
                 });
             }
 
@@ -62,27 +56,28 @@ public class Main {
     }
 
     public static void handleClient(Socket clientSocket) throws InterruptedException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-             ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());) {
-
-            oos.flush();
-
-            String username = (String) ois.readObject();
+        try (
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)
+        ) {
+            // Odbierz nazwę użytkownika jako tekst
+            String username = in.readLine();
             System.out.println("Otrzymano żądanie od: " + username);
 
-            // Wyszukiwanie użytkownika w bazie danych
+            // Znajdź użytkownika
             User user = findUser(username);
 
-            // Wysyłanie obiektu User do klienta
-            if (user != null) {
-                oos.writeObject(user);
-                System.out.println("Wysłano dane użytkownika: " + user.getName());
-            } else {
-                oos.writeObject(null); // Jeśli użytkownik nie istnieje
-                System.out.println("Nie znaleziono użytkownika: " + username);
-            }
+            // Zamień na JSON i wyślij
+            Gson gson = new Gson();
+            String userJson = gson.toJson(user);
+            out.println(userJson); // wyśle "null" jeśli user == null
 
-        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(user != null
+                    ? "Wysłano dane użytkownika: " + user.getName()
+                    : "Nie znaleziono użytkownika: " + username
+            );
+
+        } catch (IOException e) {
             System.err.println("Błąd klienta: " + e.getMessage());
         } finally {
             try {

@@ -7,13 +7,6 @@ public class Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // Attributes
-    @SuppressWarnings("unused")
-    private static final String TAG = "Product";
-
-    // Product properties
-    @SuppressWarnings("unused")
-
     private String name, category, unit, type;
     private double amount;
     private int quantity;

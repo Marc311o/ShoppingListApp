@@ -1,15 +1,14 @@
 package datamodel;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 
-public class User implements Serializable {
+public class User {
+
+
 
     private String name;
-    final private int id;
+    private int id;
 
     private ArrayList<Integer> productListsID;
     private ArrayList<ProductsList> productLists;
@@ -22,6 +21,12 @@ public class User implements Serializable {
 
     }
 
+    public User() {
+        this.productListsID = new ArrayList<>();
+        this.productLists = new ArrayList<>();
+    }
+
+
     public String getName() {
         return name;
     }
@@ -32,6 +37,18 @@ public class User implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ArrayList<ProductsList> getProductLists() {
+        return productLists;
+    }
+
+    public void setProductLists(ArrayList<ProductsList> productLists) {
+        this.productLists = productLists;
     }
 
     public ArrayList<Integer> getProductListsID() {

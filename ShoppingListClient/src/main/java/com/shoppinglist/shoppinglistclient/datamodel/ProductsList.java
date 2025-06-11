@@ -3,13 +3,21 @@ package com.shoppinglist.shoppinglistclient.datamodel;
 import java.io.*;
 import java.util.ArrayList;
 
-public class ProductsList implements Serializable {
+public class ProductsList {
 
-    private int id;
-    private String name;
-    boolean isBeingEdited;
 
-    ArrayList<Category> categories = new ArrayList<>();
+
+    public int id;
+    public String name;
+    public boolean isBeingEdited;
+
+    public ArrayList<Category> categories;
+
+    public ProductsList() {
+        this.categories = new ArrayList<>();
+    }
+
+
 
     public Category znajdzKategorie(String name) {
         for (Category k : categories) {
@@ -117,4 +125,53 @@ public class ProductsList implements Serializable {
         categories.clear();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isBeingEdited() {
+        return isBeingEdited;
+    }
+
+    public void setBeingEdited(boolean beingEdited) {
+        isBeingEdited = beingEdited;
+    }
+
+    public ArrayList<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(ArrayList<Category> categories) {
+        this.categories = categories;
+    }
+
+
+    public String toString(int nr) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("- - lista " + nr + " - -\n");
+        sb.append("ID: " + id + "\n");
+        sb.append("Name: " + name + "\n");
+        for(Category k : categories) {
+            sb.append(k.name + ":\n");
+            for(Product p : k.products) {
+                sb.append("\t" + p.name + ": " + p.amount + "/" + p.quantity + "\n");
+            }
+
+        }
+        sb.append("- - - - - - - -\n");
+        return sb.toString();
+    }
 }
