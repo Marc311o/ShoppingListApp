@@ -13,7 +13,6 @@ import java.util.Objects;
 
 public class Main extends Application {
 
-    public static String currentUserName;
 
     @Override
     public void start(Stage stage) throws IOException {

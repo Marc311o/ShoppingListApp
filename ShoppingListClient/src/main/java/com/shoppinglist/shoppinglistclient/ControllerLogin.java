@@ -38,9 +38,9 @@ public class ControllerLogin {
         User user = ConnectionHandler.getUser(username);
         if (user != null) {
             loginErrorMessage.setText("");
+            ProgramData.currentUser = user;
             try {
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/menu.fxml")));
-                Main.currentUserName = username;
                 stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
                 scene = new Scene(root);
                 stage.setScene(scene);
