@@ -1,0 +1,21 @@
+#loginBtn {
+    -fx-pref-height: 26.0;
+    -fx-pref-width: 150.0;
+    -fx-text-fill: #fff;
+    -fx-background-color: #28a745;
+    -fx-border-color: #28a745;
+    /*-fx-border-radius: 5;*/
+}
+
+#loginBtn:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #218838 ;
+}
+
+#loginErrorMessage {
+    -fx-alignment: center;
+    -fx-pref-height: 18.0;
+    -fx-pref-width: 413.0;
+    -fx-text-fill: red;
+    -fx-opacity: 0;
+}
