@@ -17,16 +17,16 @@ import java.util.ArrayList;
 
 public class ConnectionHandler {
 
-    public static User getUser() {
+    public final static int SOCKET = 5000;
+
+    public static User getUser(String username) {
         User user = null;
 
-
-        try (Socket socket = new Socket("localhost", 5000);
+        try (Socket socket = new Socket("localhost", SOCKET);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             // Wysyłanie nazwy użytkownika do serwera
-            String username = "Jerzy"; // Przykładowa nazwa użytkownika
             out.println(username);
             System.out.println("<- Wysłano username: " + username);
 
@@ -34,8 +34,9 @@ public class ConnectionHandler {
             String json = in.readLine();
 //            System.out.println("-> Odebrano JSON: " + json);
 
-            user = parseUserFromJson(json);
-
+            if(!json.equals("null")) {
+                user = parseUserFromJson(json);
+            }
 
             if (user != null) {
                 System.out.println("-> Otrzymano dane użytkownika: " + user.getName());
