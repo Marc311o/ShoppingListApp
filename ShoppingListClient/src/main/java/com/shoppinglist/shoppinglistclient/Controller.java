@@ -1,4 +1,4 @@
 package com.shoppinglist.shoppinglistclient;
 
-public class ControllerMenu {
+public class Controller {
 }
