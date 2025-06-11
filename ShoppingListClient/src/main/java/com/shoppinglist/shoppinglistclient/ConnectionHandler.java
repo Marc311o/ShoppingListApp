@@ -52,6 +52,12 @@ public class ConnectionHandler {
     }
 
     public static User parseUserFromJson(String json) {
+
+        if (json == null || json.trim().isEmpty()) {
+            System.err.println("Invalid JSON input: null or empty string.");
+            return null;
+        }
+
         Gson gson = new Gson();
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
 
