@@ -24,13 +24,14 @@ public class ControllerMenu {
     private Button myListsBtn, availableProductsBtn;
 
     public void initialize() {
-        userWelcomeLabel.setText("Welcome, " + ProgramData.currentUser.getName());
+        userWelcomeLabel.setText("Witaj, " + ProgramData.currentUser.getName());
     }
 
+    @FXML
     public void myListsBtnClicked(ActionEvent e) {
 
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/menu.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/lists.fxml")));
             stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -39,9 +40,6 @@ public class ControllerMenu {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-    } else {
-//        loginErrorMessage.setText("Nieprawidłowa nazwa użytkownika");
-    
     }
 
 
