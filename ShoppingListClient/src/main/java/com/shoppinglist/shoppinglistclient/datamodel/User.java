@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 public class User {
 
-
-
     private String name;
     private int id;
 
@@ -120,4 +118,5 @@ public class User {
         sb.append("# # # # # # # # # # #\n");
         return sb.toString();
     }
+
 }

@@ -17,8 +17,6 @@ public class ProductsList {
         this.categories = new ArrayList<>();
     }
 
-
-
     public Category znajdzKategorie(String name) {
         for (Category k : categories) {
             if (k.name.equalsIgnoreCase(name)) {

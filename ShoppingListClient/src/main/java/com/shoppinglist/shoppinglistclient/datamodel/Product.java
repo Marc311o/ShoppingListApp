@@ -1,10 +1,6 @@
 package com.shoppinglist.shoppinglistclient.datamodel;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 public class Product {
-
 
     public String name, category, unit, type;
     public double amount;
@@ -18,7 +14,6 @@ public class Product {
         this.type = typ;
         this.quantity = (int) amount;
     }
-
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;

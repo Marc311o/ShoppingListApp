@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 public class User {
 
-
-
     private String name;
     private int id;
 
@@ -103,4 +101,22 @@ public class User {
             productLists.add(list);
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("# # # # # # # # # # #\n");
+        sb.append("Name: " + name + "\n");
+        sb.append("ID: " + id + "\n");
+        sb.append("ProductListsID: " + productListsID + "\n");
+
+        int i = 1;
+        for (ProductsList list : productLists) {
+            sb.append(list.toString(i));
+            i++;
+        }
+        sb.append("# # # # # # # # # # #\n");
+        return sb.toString();
+    }
+
 }

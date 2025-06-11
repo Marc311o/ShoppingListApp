@@ -62,7 +62,7 @@ public class Main {
         ) {
             // Odbierz nazwę użytkownika jako tekst
             String username = in.readLine();
-            System.out.println("Otrzymano żądanie od: " + username);
+            System.out.println("<- Otrzymano żądanie od: " + username);
 
             // Znajdź użytkownika
             User user = findUser(username);
@@ -73,7 +73,7 @@ public class Main {
             out.println(userJson); // wyśle "null" jeśli user == null
 
             System.out.println(user != null
-                    ? "Wysłano dane użytkownika: " + user.getName()
+                    ? "-> Wysłano dane użytkownika: " + user.getName()
                     : "Nie znaleziono użytkownika: " + username
             );
 
