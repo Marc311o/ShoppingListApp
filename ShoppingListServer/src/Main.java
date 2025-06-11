@@ -23,7 +23,7 @@ public class Main {
         for (User user : users) {
             user.readProductLists();
         }
-        availableProductList.loadFromFile("lists/available.txt");
+        availableProductList.loadFromFile("lists/0.txt");
 
         try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT)) {
             System.out.println("Serwer nasłuchuje na porcie " + SOCKET_PORT);

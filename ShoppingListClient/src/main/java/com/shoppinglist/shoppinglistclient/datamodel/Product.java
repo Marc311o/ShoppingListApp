@@ -31,19 +31,19 @@ public class Product {
         return this.amount;
     }
 
-    String getType() {
+    public String getType() {
         return this.type;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    String getCategory() {
+    public  String getCategory() {
         return this.category;
     }
 
-    String getUnit() {
+    public String getUnit() {
         return this.unit;
     }
 

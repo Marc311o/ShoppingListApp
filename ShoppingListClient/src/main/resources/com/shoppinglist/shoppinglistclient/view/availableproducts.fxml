@@ -3,22 +3,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.shoppinglist.shoppinglistclient.ControllerAvailableProducts">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shoppinglist.shoppinglistclient.ControllerAvailableProducts">
 
 
-    <TableView layoutX="17.0" layoutY="58.0" prefHeight="298.0" prefWidth="562.0">
+    <TableView fx:id="availableProductsTable" layoutX="15.0" layoutY="60.0" prefHeight="300.0" prefWidth="570.0">
       <columns>
-          <TableColumn prefWidth="75.0" text="C1"/>
-          <TableColumn prefWidth="75.0" text="C2"/>
+          <TableColumn fx:id="catCol" prefWidth="142" text="Kategoria" />
+          <TableColumn fx:id="nameCol" prefWidth="142" text="Produkt" />
+         <TableColumn fx:id="unitCol" prefWidth="142" text="Jednostka" />
+         <TableColumn fx:id="typeCol" prefWidth="142" text="Typ" />
       </columns>
     </TableView>
 
-    <Button layoutX="276.0" layoutY="365.0" mnemonicParsing="false" text="Edytuj"/>
+    <Button fx:id="editBtn" layoutX="276.0" layoutY="365.0" mnemonicParsing="false" text="Edytuj" />
 
-    <Button layoutX="18.0" layoutY="18.0" mnemonicParsing="false" text="← Powrót"/>
+    <Button fx:id="goBackBtn" layoutX="18.0" layoutY="18.0" mnemonicParsing="false" text="← Powrót" onAction="#goBackBtnClick"/>
 
-    <Label layoutX="249.0" layoutY="22.0" text="Dostępne Produkty"/>
+    <Label layoutX="249.0" layoutY="22.0" text="Dostępne Produkty" />
 
 </AnchorPane>
