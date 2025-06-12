@@ -67,7 +67,7 @@ public class ControllerAvailableProducts {
         return products;
     }
 
-    @FXML
+    @FXML   
     private void goBackBtnClick(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/menu.fxml")));
