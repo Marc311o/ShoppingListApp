@@ -147,6 +147,10 @@ public class ControllerAvailableProducts {
 
     @FXML
     private void deleteProductBtnClick() {
+        Product selectedProduct = availableProductsTable.getSelectionModel().getSelectedItem();
+        ProductsList list = ProgramData.currentUser.getProductLists().getFirst();
+        list.dropProduct(selectedProduct);
+        availableProductsTable.getItems().remove(selectedProduct);
 
     }
 
