@@ -93,6 +93,16 @@ public class ProductsList {
     public void saveToFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
 
+            writer.write(id + ";" + name + ";");
+            for (int i = 0; i < UsersID.size(); i++) {
+                if (i > 0) {
+                    writer.write(",");
+                }
+                writer.write(String.valueOf(UsersID.get(i)));
+            }
+
+            writer.newLine();
+
             for (Category k : categories) {
                 for (Product p : k.products) {
                     if (p.getType().equals("int")) {
@@ -211,4 +221,31 @@ public class ProductsList {
         }
         return productsLists;
     }
+
+    public static void saveProductLists(ArrayList<ProductsList> productsLists) {
+        for(ProductsList p : productsLists) {
+            String f = "lists/" + p.getId() + ".txt";
+            p.saveToFile(f);
+        }
+    }
+
+    public static void updateGlobalListsFromUser(User user, ArrayList<ProductsList> allLists) {
+
+        for (ProductsList userList : user.getProductLists()) {
+            boolean updated = false;
+
+            for (int i = 0; i < allLists.size(); i++) {
+                if (allLists.get(i).getId() == userList.getId()) {
+                    allLists.set(i, userList);
+                    updated = true;
+                    break;
+                }
+            }
+
+            if (!updated) {
+                allLists.add(userList);
+            }
+        }
+    }
+
 }

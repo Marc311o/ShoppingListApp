@@ -88,6 +88,25 @@ public class ConnectionHandler {
         return getUser(ProgramData.currentUser.getName());
     }
 
+    public static void sendUserData(){
+        User user = ProgramData.currentUser;
+
+        Gson gson = new Gson();
+        String userJson = gson.toJson(user);
+
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            out.println("UPDATEUSERDATA$"+ user.getName() + "$" + userJson);
+            System.out.println("<- Wysłano dane użytkownika: " + user.getName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static boolean isListBeingEdited(int id){
         boolean state = true;
@@ -96,11 +115,9 @@ public class ConnectionHandler {
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
-            // Wysyłanie nazwy użytkownika do serwera
             out.println("GETSTATE$"+ id + "$");
             System.out.println("<- Wysłano zapytanie o edycję listy (id:" + id + ")");
 
-            // Odbieranie JSON-a i konwersja do obiektu User
             String response = in.readLine();
 
             if(response.equals("BUSY")){

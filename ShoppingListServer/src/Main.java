@@ -1,8 +1,13 @@
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import datamodel.ProductsList;
 import datamodel.User;
 import com.google.gson.Gson;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -106,6 +111,10 @@ public class Main {
                     handleListSetStateRequest(id, newState);
 
                 }
+                case "UPDATEUSERDATA" -> {
+                    String username = parts[1];
+                    handleUserDataUpdateRequest(username, parts[2]);
+                }
             }
 
 
@@ -162,6 +171,56 @@ public class Main {
                }
             }
         }
+    }
+
+    public static void handleUserDataUpdateRequest(String username, String json) {
+        System.out.println("<- Otrzymano dane użytkownika: " + username);
+        System.out.println(json);
+
+        User updatedUser = parseUserFromJson(json);
+
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getName().equalsIgnoreCase(username)) {
+                users.set(i, updatedUser);
+                break;
+            }
+        }
+
+        ProductsList.updateGlobalListsFromUser(updatedUser, lists);
+        ProductsList.saveProductLists(lists);
+        System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
+    }
+
+    public static User parseUserFromJson(String json) {
+
+        if (json == null || json.trim().isEmpty()) {
+            System.err.println("Invalid JSON input: null or empty string.");
+            return null;
+        }
+
+        Gson gson = new Gson();
+        JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+
+        // Parsuj imię i ID
+        String name = jsonObject.get("name").getAsString();
+        int id = jsonObject.get("id").getAsInt();
+
+        // Parsuj productListsID
+        Type listIntType = new TypeToken<ArrayList<Integer>>() {}.getType();
+        ArrayList<Integer> productListsID = gson.fromJson(jsonObject.get("productListsID"), listIntType);
+
+        // Utwórz użytkownika na podstawie konstruktora
+        User user = new User(name, id, productListsID);
+
+        // Parsuj productLists (pełne obiekty)
+        JsonElement productListsElement = jsonObject.get("productLists");
+        if (productListsElement != null && productListsElement.isJsonArray()) {
+            Type listProductsType = new TypeToken<ArrayList<ProductsList>>() {}.getType();
+            ArrayList<ProductsList> lists = gson.fromJson(productListsElement, listProductsType);
+            user.setProductLists(lists);
+        }
+
+        return user;
     }
 
 }

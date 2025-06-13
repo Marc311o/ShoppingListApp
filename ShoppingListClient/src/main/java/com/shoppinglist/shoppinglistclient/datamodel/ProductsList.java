@@ -128,7 +128,17 @@ public class ProductsList {
     }
 
     public void dropProduct(Product p) {
-        znajdzKategorie(p.getCategory()).products.remove(p);
+        Category cat = znajdzKategorie(p.getCategory());
+        cat.products.removeIf(prod ->
+                prod.getName().equalsIgnoreCase(p.getName()) &&
+                        prod.getUnit().equalsIgnoreCase(p.getUnit()) &&
+                        prod.getType().equalsIgnoreCase(p.getType())
+        );
+
+        for (Product prod : cat.products) {
+            System.out.println(prod.getName());
+        }
+
     }
 
     public void clear() {

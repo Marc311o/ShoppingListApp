@@ -140,9 +140,10 @@ public class ControllerAvailableProducts {
 
     @FXML
     private void saveListBtnClick() {
-
-
+        ConnectionHandler.sendUserData();
         editMode = false;
+        setEditModeVisibility(false);
+        ConnectionHandler.setListState(0, "FREE");
     }
 
     @FXML

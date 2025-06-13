@@ -1,5 +1,4 @@
 0;dostepne;0
-
 Spożywcze;Chleb;sztuki;int;0
 Spożywcze;Masło;sztuki;int;0
 Spożywcze;Mleko;litry;double;0.0
@@ -9,6 +8,6 @@ Chemia;Płyn do okien;sztuki;int;0
 Chemia;Dezodorant;sztuki;int;0
 Chemia;Pasta do zębów;sztuki;int;0
 
-Motoryzacja;Płyn do spryskiwaczy;litry;double;0
+Motoryzacja;Płyn do spryskiwaczy;litry;double;0.0
 
-Alkohole;Beczkowe Mocne Wisniowe;litry;double;0.0
+

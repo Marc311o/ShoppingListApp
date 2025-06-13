@@ -1,7 +1,7 @@
-5;kwartalna;1,2,3
-
+5;kwartalna;3,1,2
 Chemia;Proszek do prania;kilogramy;double;3.0
 Chemia;Odświeżacz powietrza;sztuki;int;2
 
 Motoryzacja;Zestaw kluczy;sztuki;int;1
 Motoryzacja;Opona;sztuki;int;4
+

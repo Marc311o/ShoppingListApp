@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 public class User {
 
-    private String name;
-    private int id;
+    public String name;
+    public int id;
 
-    private ArrayList<Integer> productListsID;
-    private ArrayList<ProductsList> productLists;
+    public ArrayList<Integer> productListsID;
+    public ArrayList<ProductsList> productLists;
 
     public User(String name, int id, ArrayList<Integer> productListsID) {
         this.name = name;
@@ -56,6 +56,7 @@ public class User {
     public void setProductListsID(ArrayList<Integer> productListsID) {
         this.productListsID = productListsID;
     }
+
 
     public static ArrayList<User> readUsers(String filename) {
         ArrayList<User> users = new ArrayList<>();
