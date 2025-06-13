@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -157,7 +158,28 @@ public class ControllerAvailableProducts {
 
     @FXML
     private void addProductBtnClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/newproduct_window.fxml"));
+            Parent root = loader.load();
+            ControllerNewProductWindow controller = loader.getController();
 
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Stwórz produkt");
+            dialogStage.getIcons().add(new Image("/icon.png"));
+            dialogStage.setScene(new Scene(root));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.showAndWait();
+
+            Product newProduct = controller.getResultProduct();
+            if (newProduct != null) {
+                ProductsList list = ProgramData.currentUser.getProductLists().getFirst();
+                list.addProduct(newProduct);
+                availableProductsTable.getItems().add(newProduct);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -174,7 +196,5 @@ public class ControllerAvailableProducts {
         addProductBtn.setVisible(mode);
 
     }
-
-    //TODO list editing
 
 }

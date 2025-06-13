@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.shoppinglist.shoppinglistclient.ControllerNewProductWindow"
+      stylesheets="@styles/style.css, @styles/newprod_style.css">
+
+    <Label text="Dodaj nowy produkt" />
+
+    <HBox spacing="5">
+        <ComboBox fx:id="categoryBox" promptText="Wybierz kategorię" />
+        <TextField fx:id="customCategoryField" promptText="lub wpisz nową" />
+    </HBox>
+    <TextField fx:id="nameField" promptText="Nazwa produktu" />
+    <TextField fx:id="unitField" promptText="Jednostka (np. szt, l)" />
+    <HBox spacing="10" alignment="CENTER">
+        <RadioButton fx:id="intRadio" text="int" />
+        <RadioButton fx:id="doubleRadio" text="double" />
+    </HBox>
+
+    <HBox spacing="5" alignment="CENTER">
+        <Button text="Dodaj" onAction="#handleAdd"/>
+        <Button text="Anuluj" onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>
