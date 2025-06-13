@@ -1,4 +1,4 @@
-4;miesięczna
+4;miesięczna;3,4
 
 Chemia;Płyn do naczyń;litry;double;1.0
 Chemia;Żel pod prysznic;sztuki;int;1

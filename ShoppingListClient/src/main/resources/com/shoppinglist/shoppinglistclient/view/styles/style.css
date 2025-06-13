@@ -23,3 +23,10 @@ ToggleButton:hover{
 ToggleButton:selected{
     -fx-background-color: #1f7a34;
 }
+
+Button:disabled{
+    -fx-background-color: #d4d4d4;
+    -fx-border-color: #9e9e9e;
+    -fx-text-fill: #4d4d4d;
+    -fx-cursor: pointer;
+}

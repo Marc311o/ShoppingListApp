@@ -84,4 +84,8 @@ public class ConnectionHandler {
         return user;
     }
 
+    public static User refreshUserData(){
+        return getUser(ProgramData.currentUser.getName());
+    }
+
 }

@@ -1,0 +1,5 @@
+7;na wtorek;1
+
+Spożywcze;Chleb;sztuki;int;2
+Spożywcze;Masło;sztuki;int;3
+Spożywcze;Mleko;litry;double;1.0

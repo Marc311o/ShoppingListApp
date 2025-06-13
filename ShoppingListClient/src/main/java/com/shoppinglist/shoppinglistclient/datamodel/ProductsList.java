@@ -1,20 +1,26 @@
 package com.shoppinglist.shoppinglistclient.datamodel;
 
+import com.shoppinglist.shoppinglistclient.datamodel.Category;
+import com.shoppinglist.shoppinglistclient.datamodel.Product;
+import com.shoppinglist.shoppinglistclient.datamodel.User;
+
 import java.io.*;
 import java.util.ArrayList;
 
 public class ProductsList {
 
-
-
     public int id;
     public String name;
     public boolean isBeingEdited;
+    public ArrayList<Integer> UsersID;
+    public ArrayList<String> Usernames;
 
     public ArrayList<Category> categories;
 
     public ProductsList() {
         this.categories = new ArrayList<>();
+        this.UsersID = new ArrayList<>();
+        this.Usernames = new ArrayList<>();
     }
 
     public Category znajdzKategorie(String name) {
@@ -50,6 +56,12 @@ public class ProductsList {
             String[] header = line.split(";");
             this.id = Integer.parseInt(header[0]);
             this.name = header[1];
+
+            String[] users = header[2].split(",");
+            for (String user : users) {
+                this.UsersID.add(Integer.parseInt(user));
+            }
+
 
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) {
@@ -155,6 +167,32 @@ public class ProductsList {
         this.categories = categories;
     }
 
+    public void synchronizeUsernames(ArrayList<User> allUsers) {
+        if (UsersID == null) return;
+        Usernames = new ArrayList<>();
+
+        for (User user : allUsers) {
+            if (UsersID.contains(user.getId())) {
+                Usernames.add(user.getName());
+            }
+        }
+    }
+
+    public ArrayList<Integer> getUsersID() {
+        return UsersID;
+    }
+
+    public void setUsersID(ArrayList<Integer> usersID) {
+        UsersID = usersID;
+    }
+
+    public ArrayList<String> getUsernames() {
+        return Usernames;
+    }
+
+    public void setUsernames(ArrayList<String> usernames) {
+        Usernames = usernames;
+    }
 
     public String toString(int nr) {
 
@@ -162,6 +200,8 @@ public class ProductsList {
         sb.append("- - lista " + nr + " - -\n");
         sb.append("ID: " + id + "\n");
         sb.append("Name: " + name + "\n");
+        sb.append("UsersId: " + UsersID + "\n");
+        sb.append("Usernames: " + Usernames + "\n");
         for(Category k : categories) {
             sb.append(k.name + ":\n");
             for(Product p : k.products) {
@@ -171,5 +211,10 @@ public class ProductsList {
         }
         sb.append("- - - - - - - -\n");
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return name + " (ID: " + id + ")";
     }
 }

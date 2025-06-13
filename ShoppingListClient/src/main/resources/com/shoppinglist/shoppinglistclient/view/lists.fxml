@@ -5,17 +5,19 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shoppinglist.shoppinglistclient.ControllerLists">
    <bottom>
-       <HBox prefHeight="36.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-           <ToolBar prefHeight="37.0" prefWidth="605.0">
+       <HBox prefHeight="36.0" prefWidth="-Infinity" BorderPane.alignment="CENTER">
+           <ToolBar prefHeight="37.0" prefWidth="602.0">
                <Button fx:id="addListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Dodaj listę" textAlignment="CENTER" />
-               <Button fx:id="editListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Edytuj listę" textAlignment="CENTER" />
                <Button fx:id="deleteListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Usuń listę" textAlignment="CENTER" />
+               <Button fx:id="editListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Edytuj listę" textAlignment="CENTER" />
+            <Button fx:id="shareListBtn" mnemonicParsing="false" text="Udostępnij listę" />
+            <Button fx:id="quitListBtn" contentDisplay="CENTER" layoutX="324.0" layoutY="10.0" mnemonicParsing="false" text="Opuść listę" textAlignment="CENTER" />
            </ToolBar>
 
        </HBox>
    </bottom>
    <left>
-      <ListView fx:id="list" prefHeight="321.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listList" onMouseClicked="#refreshTable" prefHeight="321.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
    </left>
    <center>
       <TableView fx:id="productListTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -29,10 +31,10 @@
    </center>
    <top>
        <AnchorPane prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-           <ToggleButton fx:id="toggleMy" layoutX="180.0" layoutY="6.0" mnemonicParsing="false" text="Moje listy" />
-           <ToggleButton fx:id="toggleShared" layoutX="254.0" layoutY="6.0" mnemonicParsing="false" text="Współdzielone listy" />
-           <Label fx:id="loggedAsLabel" layoutX="374.0" layoutY="10.0" prefHeight="18.0" prefWidth="224.0" alignment="CENTER" text="Zalogowany jako ..." />
-         <Button fx:id="goBackBtn" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBackBtnClick" text="Powrót" />
+           <ToggleButton fx:id="toggleMy" layoutX="180.0" layoutY="6.0" mnemonicParsing="false" onAction="#myListsClicked" text="Moje listy" />
+           <ToggleButton fx:id="toggleShared" layoutX="254.0" layoutY="6.0" mnemonicParsing="false" onAction="#sharedListClicked" text="Współdzielone listy" />
+           <Label fx:id="loggedAsLabel" alignment="CENTER" layoutX="374.0" layoutY="10.0" prefHeight="18.0" prefWidth="224.0" text="Zalogowany jako ..." />
+         <Button fx:id="goBackBtn" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBackBtnClick" text="← Powrót" />
        </AnchorPane>
    </top>
 </BorderPane>

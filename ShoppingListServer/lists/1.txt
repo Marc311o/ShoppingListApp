@@ -1,4 +1,4 @@
-1;dzienna
+1;dzienna;1,2
 
 Spożywcze;Chleb;sztuki;int;2
 Spożywcze;Masło;sztuki;int;3

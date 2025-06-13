@@ -1,4 +1,4 @@
-2;tygodniowa
+2;tygodniowa;2,3
 
 Chemia;Dezodorant;sztuki;int;0
 Chemia;Pasta do zębów;sztuki;int;1

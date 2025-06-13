@@ -1,6 +1,9 @@
 package com.shoppinglist.shoppinglistclient;
 
+import com.shoppinglist.shoppinglistclient.datamodel.Category;
 import com.shoppinglist.shoppinglistclient.datamodel.Product;
+import com.shoppinglist.shoppinglistclient.datamodel.ProductsList;
+import com.shoppinglist.shoppinglistclient.datamodel.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ControllerLists {
@@ -20,9 +24,9 @@ public class ControllerLists {
     private Scene scene;
 
     @FXML
-    private ListView<String> list;
+    private ListView<ProductsList> listList;
     @FXML
-    private Button addListBtn, editListBtn, deleteListBtn, goBackBtn;
+    private Button addListBtn, editListBtn, deleteListBtn, goBackBtn, shareListBtn, quitListBtn;
 
     @FXML
     private Label loggedAsLabel;
@@ -49,21 +53,25 @@ public class ControllerLists {
         toggleMy.setSelected(true);
 
         listTypeGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            // If the user tries to deselect the last button (i.e., clicks the selected one)
             if (newToggle == null && oldToggle != null) {
-                // Re-select the previously selected toggle
                 listTypeGroup.selectToggle(oldToggle);
             }
         });
 
-        // columns init
+        // table init
         catCol.prefWidthProperty().bind(productListTable.widthProperty().multiply(0.25));
         nameCol.prefWidthProperty().bind(productListTable.widthProperty().multiply(0.25));
         quantCol.prefWidthProperty().bind(productListTable.widthProperty().multiply(0.25));
         unitCol.prefWidthProperty().bind(productListTable.widthProperty().multiply(0.25));
 
+        productListTable.setPlaceholder(new Label("Wybierz listę :)"));
+
 
         loggedAsLabel.setText("Zalogowany jako " + ProgramData.currentUser.getName());
+
+        myListsClicked(null);
+        refreshTable();
+
     }
 
     @FXML
@@ -79,5 +87,86 @@ public class ControllerLists {
             throw new RuntimeException(ex);
         }
     }
+
+    @FXML
+    private void myListsClicked(ActionEvent e) {
+        User user = ConnectionHandler.refreshUserData();
+        productListTable.getItems().clear();
+        listList.getItems().clear();
+        quitListBtn.setDisable(true);
+        deleteListBtn.setDisable(false);
+        addListBtn.setDisable(false);
+        for (ProductsList list : user.getProductLists()){
+
+            if(list.getId() == 0) continue;
+            if(list.getUsersID().size() > 1) continue;
+
+            listList.getItems().add(list);
+        }
+
+
+    }
+
+    @FXML
+    private void sharedListClicked(ActionEvent e) {
+        User user = ConnectionHandler.refreshUserData();
+        listList.getItems().clear();
+        productListTable.getItems().clear();
+        deleteListBtn.setDisable(true);
+        addListBtn.setDisable(true);
+        quitListBtn.setDisable(false);
+
+        for (ProductsList list : user.getProductLists()){
+
+            if(list.getId() == 0) continue;
+            if(list.getUsersID().size() < 2) continue;
+
+            listList.getItems().add(list);
+
+        }
+    }
+
+
+    @FXML
+    private void refreshTable() {
+        ProductsList selectedList = listList.getSelectionModel().getSelectedItem();
+        if (selectedList == null) {
+            productListTable.getItems().clear();
+            return;
+        }
+
+        nameCol.setCellValueFactory(cellData -> new javafx.beans.property.ReadOnlyStringWrapper(cellData.getValue().getName()));
+        catCol.setCellValueFactory(cellData -> new javafx.beans.property.ReadOnlyStringWrapper(cellData.getValue().getCategory()));
+        unitCol.setCellValueFactory(cellData -> new javafx.beans.property.ReadOnlyStringWrapper(cellData.getValue().getUnit()));
+
+        quantCol.setCellValueFactory(cellData -> new javafx.beans.property.ReadOnlyStringWrapper(""));
+        quantCol.setCellFactory(column -> new TableCell<Product, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setText(null);
+                } else {
+                    Product product = (Product) getTableRow().getItem();
+                    if (product.getType().equalsIgnoreCase("int")) {
+                        setText(String.valueOf(product.getQuantity()));
+                    } else {
+                        setText(String.format("%.1f", product.getAmount()));
+                    }
+                }
+            }
+        });
+
+        // Załaduj dane do tabeli
+
+        ArrayList<Product> products = new ArrayList<>();
+        for(Category cat : selectedList.getCategories()){
+            products.addAll(cat.products);
+        }
+
+        productListTable.getItems().setAll(products);
+    }
+
 
 }

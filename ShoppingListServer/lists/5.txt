@@ -1,4 +1,4 @@
-5;kwartalna
+5;kwartalna;1,2,3
 
 Chemia;Proszek do prania;kilogramy;double;3.0
 Chemia;Odświeżacz powietrza;sztuki;int;2

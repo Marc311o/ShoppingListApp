@@ -1,4 +1,4 @@
-6;roczna
+6;roczna;1
 
 Chemia;Tabletki do zmywarki;sztuki;int;100
 Chemia;Środek do czyszczenia łazienek;mililitry;double;500.0

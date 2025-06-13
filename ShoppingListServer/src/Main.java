@@ -22,8 +22,15 @@ public class Main {
         users = User.readUsers("users.txt");
         for (User user : users) {
             user.readProductLists();
+            for(ProductsList list : user.getProductLists()){
+                list.synchronizeUsernames(users);
+            }
         }
+
         availableProductList.loadFromFile("lists/0.txt");
+
+//        for (User user : users) System.out.println(user.toString());
+
 
         try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT)) {
             System.out.println("Serwer nasłuchuje na porcie " + SOCKET_PORT);
