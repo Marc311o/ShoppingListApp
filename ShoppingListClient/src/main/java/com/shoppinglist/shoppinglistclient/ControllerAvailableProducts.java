@@ -13,8 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,10 +27,11 @@ public class ControllerAvailableProducts {
     private Stage stage;
     private Scene scene;
 
-
+    @FXML
+    private Label titleLabel;
 
     @FXML
-    Button goBackBtn, editBtn;
+    Button goBackBtn, editBtn, addProductBtn, quitEditModeBtn, deleteProductBtn, saveListBtn;
 
     @FXML
     TableView<Product> availableProductsTable;
@@ -41,18 +44,19 @@ public class ControllerAvailableProducts {
     @FXML
     TableColumn<Product, String>catCol;
 
-
+    @FXML
     public void initialize() {
         nameCol.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("name"));
         catCol.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("category"));
         typeCol.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("type"));
         unitCol.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("unit"));
 
+        setEditModeVisibility(false);
+
         ObservableList<Product> products = fetchProducts();
         availableProductsTable.setItems(products);
 
-
-
+        goBackBtn.toFront();
     }
 
     private ObservableList<Product> fetchProducts() {
@@ -81,9 +85,29 @@ public class ControllerAvailableProducts {
         }
     }
 
+    @FXML
     private void editBtnClick() {
-//        TODO: edycja listy produktów
+        setEditModeVisibility(true);
     }
 
+    @FXML
+    private void quitEditModeBtnClick() {
+        setEditModeVisibility(false);
+    }
+
+    private void setEditModeVisibility(boolean mode){
+        goBackBtn.setVisible(!mode);
+        editBtn.setVisible(!mode);
+
+        String label = mode ? "Dostępne Produkty (Tryb edycji)" : "Dostępne Produkty";
+        titleLabel.setText(label);
+
+        quitEditModeBtn.setVisible(mode);
+        deleteProductBtn.setVisible(mode);
+        saveListBtn.setVisible(mode);
+        addProductBtn.setVisible(mode);
+    }
+
+    //TODO list editing 
 
 }

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/availableproducts_style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shoppinglist.shoppinglistclient.ControllerAvailableProducts">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/style.css,@styles/availableproducts_style.css"  xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shoppinglist.shoppinglistclient.ControllerAvailableProducts">
 
 
     <TableView fx:id="availableProductsTable" layoutX="15.0" layoutY="60.0" prefHeight="300.0" prefWidth="570.0">
@@ -15,10 +15,15 @@
       </columns>
     </TableView>
 
-    <Button fx:id="editBtn" layoutX="276.0" layoutY="365.0" mnemonicParsing="false" text="Edytuj" />
+    <Button fx:id="editBtn" layoutX="276.0" layoutY="365.0" mnemonicParsing="false" onAction="#editBtnClick" text="Edytuj" />
 
-    <Button fx:id="goBackBtn" layoutX="18.0" layoutY="18.0" mnemonicParsing="false" text="← Powrót" onAction="#goBackBtnClick"/>
+    <Button fx:id="goBackBtn" layoutX="18.0" layoutY="18.0" mnemonicParsing="false" onAction="#goBackBtnClick" text="← Powrót" />
 
-    <Label layoutX="249.0" layoutY="22.0" text="Dostępne Produkty" />
+    <Label fx:id="titleLabel" layoutX="-1.0" layoutY="22.0" alignment="CENTER" prefHeight="18.0" prefWidth="600.0" text="Dostępne Produkty" />
+
+   <Button fx:id="addProductBtn" layoutX="311.0" layoutY="366.0" mnemonicParsing="false" text="Dodaj produkt" />
+   <Button fx:id="saveListBtn" layoutX="511.0" layoutY="366.0" mnemonicParsing="false" text="Zapisz listę" />
+   <Button fx:id="deleteProductBtn" layoutX="412.0" layoutY="366.0" mnemonicParsing="false" text="Usuń produkt" />
+   <Button fx:id="quitEditModeBtn" layoutX="15.0" layoutY="366.0" mnemonicParsing="false" onAction="#quitEditModeBtnClick" text="Powrót bez zapisywania" />
 
 </AnchorPane>
