@@ -27,7 +27,7 @@ public class ConnectionHandler {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             // Wysyłanie nazwy użytkownika do serwera
-            out.println("$GETUSER$" +username);
+            out.println("GETUSER$" +username);
             System.out.println("<- Wysłano username: " + username);
 
             // Odbieranie JSON-a i konwersja do obiektu User
@@ -97,13 +97,18 @@ public class ConnectionHandler {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             // Wysyłanie nazwy użytkownika do serwera
-            out.println("$GETSTATE$"+ id + "$");
+            out.println("GETSTATE$"+ id + "$");
             System.out.println("<- Wysłano zapytanie o edycję listy (id:" + id + ")");
 
             // Odbieranie JSON-a i konwersja do obiektu User
             String response = in.readLine();
 
-            state = response.equals("BUSY");
+            if(response.equals("BUSY")){
+                System.out.println("-> lista (id:" + id + ") jest w tym momencie edytowana");
+            }else{
+                state = false;
+                System.out.println("-> lista (id:" + id + ") jest wolna");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,10 +123,10 @@ public class ConnectionHandler {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             if(state.equals("BUSY")) {
-                out.println("$SETSTATE$" + id + "$BUSY$");
+                out.println("SETSTATE$" + id + "$BUSY$");
                 System.out.println("<- zablokowano listę (id: " + id + ")");
             }else if(state.equals("FREE")) {
-                out.println("$SETSTATE$" + id + "$FREE$");
+                out.println("SETSTATE$" + id + "$FREE$");
                 System.out.println("<- odblokowano listę (id: " + id + ")");
             }
 

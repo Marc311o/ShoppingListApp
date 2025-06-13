@@ -38,7 +38,12 @@ public class Main {
 
 
 
-        for (User user : users) System.out.println(user.toString());
+//        for (User user : users) System.out.println(user.toString());
+        lists.getFirst().setBeingEdited(true);
+
+
+
+
 
 
         try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT)) {

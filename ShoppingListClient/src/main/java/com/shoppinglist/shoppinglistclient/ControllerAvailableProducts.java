@@ -12,10 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -86,7 +84,20 @@ public class ControllerAvailableProducts {
 
     @FXML
     private void editBtnClick() {
-        setEditModeVisibility(true);
+        if(ConnectionHandler.isListBeingEdited(0)){
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lista jest aktualnie edytowana");
+            alert.setContentText("Inny użytkownik właśnie edytuje tę listę. Spróbuj ponownie później.");
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image("/icon.png"));
+            // TODO: fix
+//            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
+            alert.showAndWait();
+        }else{
+            setEditModeVisibility(true);
+        }
+
     }
 
     @FXML
