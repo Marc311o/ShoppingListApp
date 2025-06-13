@@ -95,6 +95,7 @@ public class ControllerAvailableProducts {
 //            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
             alert.showAndWait();
         }else{
+            ConnectionHandler.setListState(0, "BUSY");
             setEditModeVisibility(true);
         }
 
@@ -103,6 +104,7 @@ public class ControllerAvailableProducts {
     @FXML
     private void quitEditModeBtnClick() {
         setEditModeVisibility(false);
+        ConnectionHandler.setListState(0, "FREE");
     }
 
     private void setEditModeVisibility(boolean mode){

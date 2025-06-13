@@ -39,7 +39,7 @@ public class Main {
 
 
 //        for (User user : users) System.out.println(user.toString());
-        lists.getFirst().setBeingEdited(true);
+//        lists.getFirst().setBeingEdited(true);
 
 
 
