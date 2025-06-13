@@ -27,7 +27,7 @@ public class ConnectionHandler {
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             // Wysyłanie nazwy użytkownika do serwera
-            out.println(username);
+            out.println("$GETUSER$" +username);
             System.out.println("<- Wysłano username: " + username);
 
             // Odbieranie JSON-a i konwersja do obiektu User
@@ -88,4 +88,47 @@ public class ConnectionHandler {
         return getUser(ProgramData.currentUser.getName());
     }
 
+
+    public static boolean isListBeingEdited(int id){
+        boolean state = true;
+
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            // Wysyłanie nazwy użytkownika do serwera
+            out.println("$GETSTATE$"+ id + "$");
+            System.out.println("<- Wysłano zapytanie o edycję listy (id:" + id + ")");
+
+            // Odbieranie JSON-a i konwersja do obiektu User
+            String response = in.readLine();
+
+            state = response.equals("BUSY");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return state;
+    }
+
+    public static void setListState(int id, String state){
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            if(state.equals("BUSY")) {
+                out.println("$SETSTATE$" + id + "$BUSY$");
+                System.out.println("<- zablokowano listę (id: " + id + ")");
+            }else if(state.equals("FREE")) {
+                out.println("$SETSTATE$" + id + "$FREE$");
+                System.out.println("<- odblokowano listę (id: " + id + ")");
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

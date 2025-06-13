@@ -11,25 +11,34 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
-    static ArrayList<User> users = new ArrayList<>(); // użytkownicy
-    static ProductsList availableProductList = new ProductsList();
+    static ArrayList<User> users;   // użytkownicy
+    static ArrayList<ProductsList> lists;   // listy
 
     static final int SOCKET_PORT = 5000;
+    static final int MAX_LISTS_SAVED = 100;
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         // Inicjalizacja danych
         users = User.readUsers("users.txt");
+        lists = ProductsList.readProductLists(MAX_LISTS_SAVED);
+
         for (User user : users) {
-            user.readProductLists();
+
+            for(ProductsList list : lists) {
+                if(user.getProductListsID().contains(list.getId())){
+                    user.addProductLists(list);
+                }
+            }
+
             for(ProductsList list : user.getProductLists()){
                 list.synchronizeUsernames(users);
             }
         }
 
-        availableProductList.loadFromFile("lists/0.txt");
 
-//        for (User user : users) System.out.println(user.toString());
+
+        for (User user : users) System.out.println(user.toString());
 
 
         try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT)) {
@@ -68,21 +77,32 @@ public class Main {
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)
         ) {
             // Odbierz nazwę użytkownika jako tekst
-            String username = in.readLine();
-            System.out.println("<- Otrzymano żądanie od: " + username);
+            String request = in.readLine();
+            String[] parts = request.split("\\$");
 
-            // Znajdź użytkownika
-            User user = findUser(username);
+            switch (parts[0]) {
+                case "GETUSER" -> {
 
-            // Zamień na JSON i wyślij
-            Gson gson = new Gson();
-            String userJson = gson.toJson(user);
-            out.println(userJson); // wyśle "null" jeśli user == null
+                    String username = parts[1];
+                    String userJson = handleUserDataRequest(username);
+                    out.println(userJson);
+                }
+                case "GETSTATE" -> {
 
-            System.out.println(user != null
-                    ? "-> Wysłano dane użytkownika: " + user.getName()
-                    : "Nie znaleziono użytkownika: " + username
-            );
+                    int id = Integer.parseInt(parts[1]);
+                    String response = handleListGetStateRequest(id);
+                    out.println(response);
+
+                }
+                case "SETSTATE" -> {
+
+                    int id = Integer.parseInt(parts[1]);
+                    String newState = parts[2];
+                    handleListSetStateRequest(id, newState);
+
+                }
+            }
+
 
         } catch (IOException e) {
             System.err.println("Błąd klienta: " + e.getMessage());
@@ -94,4 +114,49 @@ public class Main {
             }
         }
     }
+
+    public static String handleUserDataRequest(String username) {
+        System.out.println("<- Otrzymano żądanie od: " + username);
+
+        // Znajdź użytkownika
+        User user = findUser(username);
+
+        // Zamień na JSON i wyślij
+        Gson gson = new Gson();
+        String userJson = gson.toJson(user);
+
+
+        System.out.println(user != null
+                ? "-> Wysłano dane użytkownika: " + user.getName()
+                : "Nie znaleziono użytkownika: " + username
+        );
+
+        return userJson;
+    }
+
+    public static String handleListGetStateRequest(int id) {
+        String response = "LISTNOTFOUND";
+        for(ProductsList list : lists){
+            if(list.getId() == id){
+                response = (list.isBeingEdited() ? "BUSY" : "FREE");
+            }
+        }
+
+        return response;
+    }
+
+    public static void handleListSetStateRequest(int id, String state) {
+        for(ProductsList list : lists){
+            if(list.getId() == id){
+               if(state.equals("BUSY")){
+                   list.setBeingEdited(true);
+                   System.out.println("<- zablokowano listę (id: " + id + ")");
+               }else if(state.equals("FREE")){
+                   list.setBeingEdited(false);
+                   System.out.println("<- odblokowano listę (id: " + id + ")");
+               }
+            }
+        }
+    }
+
 }

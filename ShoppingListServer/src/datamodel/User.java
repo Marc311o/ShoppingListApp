@@ -49,6 +49,10 @@ public class User {
         this.productLists = productLists;
     }
 
+    public void addProductLists(ProductsList productList) {
+        this.productLists.add(productList);
+    }
+
     public ArrayList<Integer> getProductListsID() {
         return productListsID;
     }
@@ -91,15 +95,8 @@ public class User {
         return users;
     }
 
-    public void readProductLists() {
-        productLists = new ArrayList<>();
-
-        for (int id : productListsID) {
-            ProductsList list = new ProductsList();
-            String filename = "lists/" + id + ".txt";
-            list.loadFromFile(filename);
-            productLists.add(list);
-        }
+    public static void refreshUsers() {
+        //TODO
     }
 
     @Override

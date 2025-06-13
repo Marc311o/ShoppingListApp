@@ -43,7 +43,7 @@ public class ProductsList {
         return null;
     }
 
-    public void loadFromFile(String filename) {
+    public void loadFromFile(String filename) throws FileNotFoundException {
         isBeingEdited = true;
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -85,7 +85,7 @@ public class ProductsList {
                 znajdzKategorie(kategoria).products.add(p);
             }
         } catch (IOException e) {
-            System.err.println("Błąd wczytywania produktów: " + e.getMessage());
+//            System.err.println("Błąd wczytywania produktów: " + e.getMessage());
         }
         isBeingEdited = false;
     }
@@ -191,5 +191,24 @@ public class ProductsList {
         }
         sb.append("- - - - - - - -\n");
         return sb.toString();
+    }
+
+    public static ArrayList<ProductsList> readProductLists(int max) {
+        ArrayList<ProductsList> productsLists = new ArrayList<>();
+        for(int i = 0; i < max; i++){
+            String filename = "lists/" + i + ".txt";
+
+            ProductsList newList = new ProductsList();
+            try{
+                newList.loadFromFile(filename);
+            }catch (FileNotFoundException e){
+                continue;
+            }
+            if(newList.getName() == null){
+                continue;
+            }
+            productsLists.add(newList);
+        }
+        return productsLists;
     }
 }
