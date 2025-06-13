@@ -4,6 +4,7 @@ import com.shoppinglist.shoppinglistclient.datamodel.Category;
 import com.shoppinglist.shoppinglistclient.datamodel.Product;
 import com.shoppinglist.shoppinglistclient.datamodel.ProductsList;
 import com.shoppinglist.shoppinglistclient.datamodel.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ public class ControllerAvailableProducts {
 
     private Stage stage;
     private Scene scene;
+    private boolean editMode = false;
 
     @FXML
     private Label titleLabel;
@@ -41,6 +43,16 @@ public class ControllerAvailableProducts {
     @FXML
     TableColumn<Product, String>catCol;
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+
+        // Dodaj obsługę zamknięcia okna
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Zamykanie okna – zwalniam listę");
+            ConnectionHandler.setListState(0, "FREE");
+        });
+    }
+
     @FXML
     public void initialize() {
         nameCol.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("name"));
@@ -53,7 +65,24 @@ public class ControllerAvailableProducts {
         ObservableList<Product> products = fetchProducts();
         availableProductsTable.setItems(products);
 
+        availableProductsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            deleteProductBtn.setDisable(newSelection == null);
+        });
+
+        // odblokowuje liste po nieoczekiwanym zamknięciu
+        Platform.runLater(() -> {
+            Stage stage = (Stage) availableProductsTable.getScene().getWindow();
+            stage.setOnCloseRequest(event -> {
+                if(editMode) {
+                    ConnectionHandler.setListState(0, "FREE");
+                }
+            });
+        });
+
+
         goBackBtn.toFront();
+        deleteProductBtn.setDisable(true);
+
     }
 
     private ObservableList<Product> fetchProducts() {
@@ -97,6 +126,7 @@ public class ControllerAvailableProducts {
         }else{
             ConnectionHandler.setListState(0, "BUSY");
             setEditModeVisibility(true);
+            editMode = true;
         }
 
     }
@@ -104,8 +134,27 @@ public class ControllerAvailableProducts {
     @FXML
     private void quitEditModeBtnClick() {
         setEditModeVisibility(false);
+        editMode = false;
         ConnectionHandler.setListState(0, "FREE");
     }
+
+    @FXML
+    private void saveListBtnClick() {
+
+
+        editMode = false;
+    }
+
+    @FXML
+    private void deleteProductBtnClick() {
+
+    }
+
+    @FXML
+    private void addProductBtnClick() {
+
+    }
+
 
     private void setEditModeVisibility(boolean mode){
         goBackBtn.setVisible(!mode);
@@ -118,6 +167,7 @@ public class ControllerAvailableProducts {
         deleteProductBtn.setVisible(mode);
         saveListBtn.setVisible(mode);
         addProductBtn.setVisible(mode);
+
     }
 
     //TODO list editing
