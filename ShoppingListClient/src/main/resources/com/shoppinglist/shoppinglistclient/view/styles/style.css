@@ -8,3 +8,18 @@ Button:hover{
     -fx-cursor: hand;
     -fx-background-color: #218838 ;
 }
+
+ToggleButton{
+    -fx-text-fill: #fff;
+    -fx-background-color: #28a745;
+    -fx-border-color: #28a745;
+}
+
+ToggleButton:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #218838 ;
+}
+
+ToggleButton:selected{
+    -fx-background-color: #1f7a34;
+}

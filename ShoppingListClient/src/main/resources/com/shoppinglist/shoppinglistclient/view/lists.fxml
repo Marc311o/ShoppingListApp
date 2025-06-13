@@ -3,31 +3,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@styles/style.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-       <HBox alignment="CENTER" prefHeight="43.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-           <Button mnemonicParsing="false" text="Moje Listy" />
-           <Button mnemonicParsing="false" text="Wspólne listy" />
-           <Label text="Zalogowany jako ..." />
-       </HBox>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shoppinglist.shoppinglistclient.ControllerLists">
    <bottom>
        <HBox prefHeight="36.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-           <Button contentDisplay="CENTER" mnemonicParsing="false" text="Edytuj" textAlignment="CENTER" />
-           <Button contentDisplay="CENTER" mnemonicParsing="false" text="Dodaj" textAlignment="CENTER" />
-           <Button contentDisplay="CENTER" mnemonicParsing="false" text="Usuń" textAlignment="CENTER" />
+           <ToolBar prefHeight="37.0" prefWidth="605.0">
+               <Button fx:id="addListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Dodaj listę" textAlignment="CENTER" />
+               <Button fx:id="editListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Edytuj listę" textAlignment="CENTER" />
+               <Button fx:id="deleteListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Usuń listę" textAlignment="CENTER" />
+           </ToolBar>
 
        </HBox>
    </bottom>
    <left>
-      <ListView prefHeight="321.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="list" prefHeight="321.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
    </left>
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="productListTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+            <TableColumn fx:id="catCol" prefWidth="75.0" text="Kategoria" />
+            <TableColumn fx:id="nameCol" prefWidth="75.0" text="Produkt" />
+            <TableColumn fx:id="quantCol" prefWidth="75.0" text="Ilość" />
+            <TableColumn fx:id="unitCol" prefWidth="75.0" text="Jednostka" />
         </columns>
       </TableView>
    </center>
+   <top>
+       <AnchorPane prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+           <ToggleButton fx:id="toggleMy" layoutX="180.0" layoutY="6.0" mnemonicParsing="false" text="Moje listy" />
+           <ToggleButton fx:id="toggleShared" layoutX="254.0" layoutY="6.0" mnemonicParsing="false" text="Współdzielone listy" />
+           <Label fx:id="loggedAsLabel" layoutX="374.0" layoutY="10.0" prefHeight="18.0" prefWidth="224.0" alignment="CENTER" text="Zalogowany jako ..." />
+         <Button fx:id="goBackBtn" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBackBtnClick" text="Powrót" />
+       </AnchorPane>
+   </top>
 </BorderPane>
