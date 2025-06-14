@@ -122,6 +122,9 @@ public class ProductsList {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
 
             writer.write(id + ";" + name + ";");
+            if(name.equals("dostepne")) {
+                writer.write("0\n");
+            }
             for (int i = 0; i < UsersID.size(); i++) {
                 if (i > 0) {
                     writer.write(",");
@@ -215,22 +218,24 @@ public class ProductsList {
     // SYNCH METODS
     // lists -> users
     public static void assignListsToUsers(ArrayList<User> users, ArrayList<ProductsList> allLists) {
-        // Tworzymy mapę ID użytkownika → obiekt User (dla szybszego dostępu)
+        // mapa ID użytkownika → obiekt User
         Map<Integer, User> userMap = new HashMap<>();
         for (User user : users) {
             userMap.put(user.getId(), user);
-            // Wyczyść obecne dane, żeby nie dublować
             user.getProductListsID().clear();
             user.getProductLists().clear();
         }
 
-        // Przypisz każdą listę do jej użytkowników
         for (ProductsList list : allLists) {
             for (Integer userId : list.getUsersID()) {
                 User user = userMap.get(userId);
                 if (user != null) {
-                    user.getProductListsID().add(list.getId());
-                    user.addProductLists(list);
+                    if (!user.getProductListsID().contains(list.getId())) {
+                        user.getProductListsID().add(list.getId());
+                    }
+                    if (!user.getProductLists().contains(list)) {
+                        user.addProductLists(list);
+                    }
                 } else {
                     System.err.println("Brak użytkownika o ID: " + userId + " (lista ID: " + list.getId() + ")");
                 }
@@ -239,7 +244,6 @@ public class ProductsList {
     }
     // users -> lists
     public static void updateGlobalListsFromUser(User user, ArrayList<ProductsList> allLists) {
-
         for (ProductsList userList : user.getProductLists()) {
             boolean updated = false;
 
@@ -256,24 +260,37 @@ public class ProductsList {
             }
         }
     }
+
     // usersid -> usernames
     public void synchronizeUsernames(ArrayList<User> allUsers) {
         if (UsersID == null) return;
         Usernames = new ArrayList<>();
 
+        Map<Integer, String> idToName = new HashMap<>();
         for (User user : allUsers) {
-            if (UsersID.contains(user.getId())) {
-                Usernames.add(user.getName());
+            idToName.put(user.getId(), user.getName());
+        }
+
+        for (Integer id : UsersID) {
+            String name = idToName.get(id);
+            if (name != null) {
+                Usernames.add(name);
             }
         }
     }
     // usernames -> usersid
-    public void synchronizeIDs(ArrayList<User> allUsers){
-
+    public void synchronizeIDs(ArrayList<User> allUsers) {
         UsersID = new ArrayList<>();
+
+        Map<String, Integer> nameToId = new HashMap<>();
         for (User user : allUsers) {
-            if (Usernames.contains(user.getName())) {
-                UsersID.add(user.getId());
+            nameToId.put(user.getName(), user.getId());
+        }
+
+        for (String name : Usernames) {
+            Integer id = nameToId.get(name);
+            if (id != null) {
+                UsersID.add(id);
             }
         }
     }

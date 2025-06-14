@@ -2,6 +2,8 @@ package datamodel;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
 
@@ -94,7 +96,7 @@ public class User {
     public String parseUserToFileFormat(){
         StringBuilder sb = new StringBuilder();
         sb.append(name + ";" + id + ";");
-
+        sb.append("0,");
         for (int i = 0; i < productListsID.size(); i++) {
             sb.append(productListsID.get(i));
             if (i < productListsID.size() - 1) {
@@ -120,18 +122,21 @@ public class User {
 
     // synch
     public static void refreshUsers(ArrayList<User> users, ArrayList<ProductsList> allLists) {
+        Map<Integer, ProductsList> listMap = new HashMap<>();
+        for (ProductsList list : allLists) {
+            listMap.put(list.getId(), list);
+        }
+
         for (User user : users) {
             ArrayList<ProductsList> refreshedLists = new ArrayList<>();
-
             for (Integer listId : user.getProductListsID()) {
-                for (ProductsList list : allLists) {
-                    if (list.getId() == listId) {
-                        refreshedLists.add(list);
-                        break;
-                    }
+                ProductsList match = listMap.get(listId);
+                if (match != null) {
+                    refreshedLists.add(match);
+                } else {
+                    System.err.println("Brak listy o ID: " + listId + " dla użytkownika: " + user.getName());
                 }
             }
-
             user.setProductLists(refreshedLists);
         }
     }

@@ -232,7 +232,7 @@ public class ControllerLists {
         ProductsList list = listList.getSelectionModel().getSelectedItem();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Potwierdzenie");
-        alert.setHeaderText("Czy na pewno chcesz usunąć listę '" + list.getName() + "'");
+        alert.setHeaderText("Czy na pewno chcesz usunąć listę '" + list.getName() + "'?");
         alert.setContentText("Tej operacji nie można cofnąć.");
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -261,6 +261,20 @@ public class ControllerLists {
     }
 
     @FXML
+    private void quitListClicked(ActionEvent e) {
+        ProductsList list = listList.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Potwierdzenie");
+        alert.setHeaderText("Czy na pewno chcesz opuścić listę '" + list.getName() + "'?");
+        alert.setContentText("Tej operacji nie można cofnąć.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            ConnectionHandler.deleteListFromUser(list.getId(), ProgramData.currentUser.getName());
+        }
+    }
+
+    @FXML
     private void shareListClicked(ActionEvent e) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/share_window.fxml"));
@@ -279,8 +293,6 @@ public class ControllerLists {
 
             String name = controller.getUsername();
             System.out.println(name);
-
-//            ConnectionHandler.sendUserData();
 
         } catch (IOException event) {
             event.printStackTrace();

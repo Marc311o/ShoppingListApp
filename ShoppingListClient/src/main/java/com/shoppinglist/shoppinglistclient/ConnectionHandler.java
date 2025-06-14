@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.shoppinglist.shoppinglistclient.datamodel.ProductsList;
 import com.shoppinglist.shoppinglistclient.datamodel.User;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -207,5 +208,19 @@ public class ConnectionHandler {
             e.printStackTrace();
         }
 
+    }
+
+    public static void deleteListFromUser(int listID, String username){
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            out.println("QUITLIST$" + username + "$" + listID);
+            System.out.println("<- Wysłano prośbę o usunięcie z listy (id:" + listID + ") użytkownika: " + username);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

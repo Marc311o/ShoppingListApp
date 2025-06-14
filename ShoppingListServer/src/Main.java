@@ -125,6 +125,10 @@ public class Main {
                     String username = parts[1];
                     int id = Integer.parseInt(parts[2]);
                     handleAddUserToListRequest(id, username);
+                }case "QUITLIST" -> {
+                    String username = parts[1];
+                    int id = Integer.parseInt(parts[2]);
+                    handleRemoveUserFromListRequest(id, username);
                 }
 
             }
@@ -249,6 +253,7 @@ public class Main {
     public static void handleAddUserToListRequest(int listID, String username) {
         System.out.println("<- Otrzymano prośbę o udostępnienie listy (id: "+ listID +") użytkownikowi" + username);
 
+        User selecedUser = findUser(username);
 
         for (ProductsList list : lists) {
             if (list.getId() == listID) {
@@ -258,18 +263,63 @@ public class Main {
             }
         }
 
-        User selecedUser = findUser(username);
+
         if(selecedUser != null){
             selecedUser.getProductListsID().add(listID);
             ProductsList.assignListsToUsers(users, lists);
             User.refreshUsers(users, lists);
         }
+        synchronizeAll(users, lists);
 
         User.writeUsersToFile("users.txt", users);
         ProductsList.saveProductLists(lists);
 
         System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
         System.out.println(selecedUser);
+    }
+
+    public static void handleRemoveUserFromListRequest(int listID, String username) {
+        System.out.println("<- Otrzymano prośbę o opuszczenie listy (id: " + listID + ") przez użytkownika " + username);
+
+        User selectedUser = findUser(username);
+
+        for (ProductsList list : lists) {
+            if (list.getId() == listID) {
+                list.getUsernames().remove(username);
+                list.synchronizeIDs(users);
+                break;
+            }
+        }
+
+        if (selectedUser != null) {
+            selectedUser.getProductListsID().remove(Integer.valueOf(listID)); // ← poprawka tutaj!
+            ProductsList.assignListsToUsers(users, lists);
+            User.refreshUsers(users, lists);
+        }
+
+        synchronizeAll(users, lists); // jeśli masz spójną metodę nadrzędną
+
+        User.writeUsersToFile("users.txt", users);
+        ProductsList.saveProductLists(lists);
+
+        System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
+        System.out.println(selectedUser);
+    }
+
+    public static void synchronizeAll(ArrayList<User> users, ArrayList<ProductsList> lists) {
+
+
+        // Uaktualnij usernames i usersID w każdej liście
+        for (ProductsList list : lists) {
+            list.synchronizeUsernames(users);
+            list.synchronizeIDs(users);
+        }
+
+        // Na podstawie list przypisz do użytkowników
+        ProductsList.assignListsToUsers(users, lists);
+
+        // Odśwież referencje list w użytkownikach (po ID)
+        User.refreshUsers(users, lists);
     }
 
 }
