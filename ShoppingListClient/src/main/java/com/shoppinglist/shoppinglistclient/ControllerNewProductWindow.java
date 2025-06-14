@@ -63,7 +63,6 @@ public class ControllerNewProductWindow {
 
     @FXML
     private void handleAdd() {
-        // TODO: (maybe) disable add button when empty fields
 
         try {
             String name = nameField.getText().trim();

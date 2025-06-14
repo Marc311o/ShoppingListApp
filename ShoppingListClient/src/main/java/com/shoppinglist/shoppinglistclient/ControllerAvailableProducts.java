@@ -44,6 +44,7 @@ public class ControllerAvailableProducts {
     @FXML
     TableColumn<Product, String>catCol;
 
+    // TODO clean this
     public void setStage(Stage stage) {
         this.stage = stage;
 
@@ -71,6 +72,7 @@ public class ControllerAvailableProducts {
         });
 
         // odblokowuje liste po nieoczekiwanym zamknięciu
+        // TODO or that
         Platform.runLater(() -> {
             Stage stage = (Stage) availableProductsTable.getScene().getWindow();
             stage.setOnCloseRequest(event -> {

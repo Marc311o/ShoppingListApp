@@ -54,6 +54,7 @@ public class ControllerLists {
         toggleShared.setToggleGroup(listTypeGroup);
         toggleMy.setSelected(true);
 
+        // toggle grupa list prywatnyvh i wspoldzielonych
         listTypeGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null && oldToggle != null) {
                 listTypeGroup.selectToggle(oldToggle);
@@ -71,9 +72,9 @@ public class ControllerLists {
 
         loggedAsLabel.setText("Zalogowany jako " + ProgramData.currentUser.getName());
 
+        // domyslnie okno otwiera się na prywatnych listach
         myListsClicked(null);
         refreshTable();
-
     }
 
     @FXML
@@ -92,6 +93,10 @@ public class ControllerLists {
 
     @FXML
     private void myListsClicked(ActionEvent e) {
+        quitListBtn.disableProperty().unbind();
+        editListBtn.disableProperty().unbind();
+        shareListBtn.disableProperty().unbind();
+
         User user = ConnectionHandler.refreshUserData();
         productListTable.getItems().clear();
         listList.getItems().clear();
@@ -105,12 +110,25 @@ public class ControllerLists {
 
             listList.getItems().add(list);
         }
+        deleteListBtn.disableProperty().bind(
+                listList.getSelectionModel().selectedItemProperty().isNull()
+        );
+        shareListBtn.disableProperty().bind(
+                listList.getSelectionModel().selectedItemProperty().isNull()
+        );
+        editListBtn.disableProperty().bind(
+                listList.getSelectionModel().selectedItemProperty().isNull()
+        );
 
 
     }
 
     @FXML
     private void sharedListClicked(ActionEvent e) {
+        deleteListBtn.disableProperty().unbind();
+        editListBtn.disableProperty().unbind();
+        shareListBtn.disableProperty().unbind();
+
         User user = ConnectionHandler.refreshUserData();
         listList.getItems().clear();
         productListTable.getItems().clear();
@@ -126,6 +144,15 @@ public class ControllerLists {
             listList.getItems().add(list);
 
         }
+        quitListBtn.disableProperty().bind(
+                listList.getSelectionModel().selectedItemProperty().isNull()
+        );
+        shareListBtn.disableProperty().bind(
+                listList.getSelectionModel().selectedItemProperty().isNull()
+        );
+        editListBtn.disableProperty().bind(
+                listList.getSelectionModel().selectedItemProperty().isNull()
+        );
     }
 
     @FXML
@@ -198,6 +225,9 @@ public class ControllerLists {
         }
     }
 
+    @FXML
+    private void deleteListClicked(ActionEvent e) {
 
+    }
 
 }
