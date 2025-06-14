@@ -19,6 +19,7 @@ public class ControllerNewProductWindow {
     @FXML private TextField customCategoryField;
     @FXML private TextField unitField;
     @FXML private RadioButton intRadio, doubleRadio;
+    @FXML private Button CancelBtn, AddProductBtn;
 
 
     private Product resultProduct;
@@ -34,9 +35,29 @@ public class ControllerNewProductWindow {
         for(Category cat : list.getCategories()) {
             cats.add(cat.name);
         }
+        cats.add("Inna");
 
+        AddProductBtn.setDisable(true);
         categoryBox.getItems().addAll(cats);
         intRadio.setSelected(true);
+
+        categoryBox.setOnAction(event -> {
+            boolean isOther = "Inna".equals(categoryBox.getValue());
+            customCategoryField.setVisible(isOther);
+
+            if (!isOther) {
+                customCategoryField.clear();
+            }
+
+            handleKeyReleased(); // Sprawdź, czy można włączyć przycisk
+        });
+
+        customCategoryField.setVisible(false);
+
+        // Opcjonalnie: reaguj na wpisywanie w customCategoryField też
+        customCategoryField.setOnKeyReleased(event -> handleKeyReleased());
+        nameField.setOnKeyReleased(event -> handleKeyReleased());
+        unitField.setOnKeyReleased(event -> handleKeyReleased());
 
     }
 
@@ -65,6 +86,20 @@ public class ControllerNewProductWindow {
         resultProduct = null;
         ((Stage) nameField.getScene().getWindow()).close();
     }
+
+    @FXML
+    private void handleKeyReleased() {
+        AddProductBtn.setDisable(!isCategorySelected() || nameField.getText().isEmpty() || unitField.getText().isEmpty());
+    }
+
+    private boolean isCategorySelected() {
+        if ("Inna".equals(categoryBox.getValue())) {
+            return !customCategoryField.getText().trim().isEmpty();
+        } else {
+            return categoryBox.getValue() != null && !categoryBox.getValue().trim().isEmpty();
+        }
+    }
+
 
     public Product getResultProduct() {
         return resultProduct;

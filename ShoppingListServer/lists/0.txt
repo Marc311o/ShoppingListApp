@@ -11,4 +11,5 @@ Chemia;Pasta do zębów;sztuki;int;0
 
 Motoryzacja;Płyn do spryskiwaczy;litry;double;0.0
 
+Słodycze;Żelki;paczki;int;0
 
