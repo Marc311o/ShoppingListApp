@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ControllerLists {
 
@@ -229,7 +230,29 @@ public class ControllerLists {
     @FXML
     private void deleteListClicked(ActionEvent e) {
         ProductsList list = listList.getSelectionModel().getSelectedItem();
-        System.out.println(list.getId());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Potwierdzenie");
+        alert.setHeaderText("Czy na pewno chcesz usunąć listę '" + list.getName() + "'");
+        alert.setContentText("Tej operacji nie można cofnąć.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            for(int i = 0; i < ProgramData.currentUser.getProductListsID().size(); i++){
+                if(ProgramData.currentUser.getProductListsID().get(i).equals(list.getId())){
+                    ProgramData.currentUser.getProductListsID().remove(i);
+                }
+            }
+
+            for(int i = 0; i < ProgramData.currentUser.getProductLists().size(); i++){
+                if(ProgramData.currentUser.getProductLists().get(i).getId() == list.getId() ){
+                    ProgramData.currentUser.getProductLists().remove(i);
+                }
+            }
+            ConnectionHandler.sendUserData();
+            reloadListofPrivateLists(ProgramData.currentUser);
+        }
+
+
     }
 
     private void reloadListofPrivateLists(User user){
