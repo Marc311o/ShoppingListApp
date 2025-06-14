@@ -43,12 +43,12 @@ public class Main {
 
 
 
-//        for (User user : users) System.out.println(user.toString());
-//        lists.getFirst().setBeingEdited(true);
+        for (User user : users) System.out.println(user.toString());
 
-
-
-
+        int i = 1;
+        for (ProductsList list : lists){
+            System.out.println(list.toString(i++));
+        }
 
 
         try (ServerSocket serverSocket = new ServerSocket(SOCKET_PORT)) {
@@ -118,6 +118,13 @@ public class Main {
                 case "GETUNUSEDLISTID" -> {
                     int id = ProductsList.getNextAvailableListId(lists);
                     out.println(id);
+                }case "GETALLUSERNAMES" -> {
+                    String usernames = getAllUserNames();
+                    out.println(usernames);
+                }case "SHARELIST" -> {
+                    String username = parts[1];
+                    int id = Integer.parseInt(parts[2]);
+                    handleAddUserToListRequest(id, username);
                 }
 
             }
@@ -180,7 +187,7 @@ public class Main {
 
     public static void handleUserDataUpdateRequest(String username, String json) {
         System.out.println("<- Otrzymano dane użytkownika: " + username);
-        System.out.println(json);
+//        System.out.println(json);
 
         User updatedUser = parseUserFromJson(json);
 
@@ -226,6 +233,39 @@ public class Main {
         }
 
         return user;
+    }
+
+    public static String getAllUserNames() {
+        ArrayList<String> userNames = new ArrayList<>();
+
+        for (User user : users) {
+            userNames.add(user.getName());
+        }
+
+        return String.join(";", userNames);
+    }
+
+    public static void handleAddUserToListRequest(int listID, String username) {
+        System.out.println("<- Otrzymano prośbę o udostępnienie listy (id: "+ listID +") użytkownikowi" + username);
+
+
+        for (ProductsList list : lists) {
+            if (list.getId() == listID) {
+                list.getUsernames().add(username);
+                list.synchronizeIDs(users);
+                break;
+            }
+        }
+
+        User selecedUser = findUser(username);
+        if(selecedUser != null){
+            selecedUser.getProductListsID().add(listID);
+            ProductsList.assignListsToUsers(users, lists);
+            User.refreshUsers(users, lists);
+        }
+
+        System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
+        System.out.println(selecedUser);
     }
 
 }

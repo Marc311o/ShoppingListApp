@@ -7,9 +7,9 @@ public class User {
 
     private String name;
     private int id;
-
     private ArrayList<Integer> productListsID;
     private ArrayList<ProductsList> productLists;
+
 
     public User(String name, int id, ArrayList<Integer> productListsID) {
         this.name = name;
@@ -24,11 +24,10 @@ public class User {
         this.productLists = new ArrayList<>();
     }
 
-
+    // getters and setters
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -36,7 +35,6 @@ public class User {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -44,23 +42,22 @@ public class User {
     public ArrayList<ProductsList> getProductLists() {
         return productLists;
     }
-
     public void setProductLists(ArrayList<ProductsList> productLists) {
         this.productLists = productLists;
+    }
+
+    public ArrayList<Integer> getProductListsID() {
+        return productListsID;
+    }
+    public void setProductListsID(ArrayList<Integer> productListsID) {
+        this.productListsID = productListsID;
     }
 
     public void addProductLists(ProductsList productList) {
         this.productLists.add(productList);
     }
 
-    public ArrayList<Integer> getProductListsID() {
-        return productListsID;
-    }
-
-    public void setProductListsID(ArrayList<Integer> productListsID) {
-        this.productListsID = productListsID;
-    }
-
+    // file handling
     public static ArrayList<User> readUsers(String filename) {
         ArrayList<User> users = new ArrayList<>();
 
@@ -95,10 +92,25 @@ public class User {
         return users;
     }
 
-    public static void refreshUsers() {
-        //TODO
+    // synch
+    public static void refreshUsers(ArrayList<User> users, ArrayList<ProductsList> allLists) {
+        for (User user : users) {
+            ArrayList<ProductsList> refreshedLists = new ArrayList<>();
+
+            for (Integer listId : user.getProductListsID()) {
+                for (ProductsList list : allLists) {
+                    if (list.getId() == listId) {
+                        refreshedLists.add(list);
+                        break;
+                    }
+                }
+            }
+
+            user.setProductLists(refreshedLists);
+        }
     }
 
+    // debug
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

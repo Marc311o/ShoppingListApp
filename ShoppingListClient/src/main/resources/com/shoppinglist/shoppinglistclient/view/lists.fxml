@@ -10,7 +10,7 @@
                <Button fx:id="addListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Dodaj listę" textAlignment="CENTER" onAction="#addListClicked"/>
                <Button fx:id="deleteListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Usuń listę" textAlignment="CENTER" onAction="#deleteListClicked"/>
                <Button fx:id="editListBtn" contentDisplay="CENTER" mnemonicParsing="false" text="Edytuj listę" textAlignment="CENTER" />
-            <Button fx:id="shareListBtn" mnemonicParsing="false" text="Udostępnij listę" />
+            <Button fx:id="shareListBtn" mnemonicParsing="false" text="Udostępnij listę" onAction="#shareListClicked"/>
             <Button fx:id="quitListBtn" contentDisplay="CENTER" layoutX="324.0" layoutY="10.0" mnemonicParsing="false" text="Opuść listę" textAlignment="CENTER" />
            </ToolBar>
 

@@ -255,6 +255,38 @@ public class ControllerLists {
 
     }
 
+    @FXML
+    private void editListClicked(ActionEvent e) {
+
+    }
+
+    @FXML
+    private void shareListClicked(ActionEvent e) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/share_window.fxml"));
+            Parent root = loader.load();
+
+            ControllerShareList controller = loader.getController();
+            ProductsList list = listList.getSelectionModel().getSelectedItem();
+            controller.setSelectedList(list);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Udostępnij listę");
+            dialogStage.getIcons().add(new Image("/icon.png"));
+            dialogStage.setScene(new Scene(root));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.showAndWait();
+
+            String name = controller.getUsername();
+            System.out.println(name);
+
+//            ConnectionHandler.sendUserData();
+
+        } catch (IOException event) {
+            event.printStackTrace();
+        }
+    }
+
     private void reloadListofPrivateLists(User user){
         listList.getItems().clear();
         for (ProductsList list : user.getProductLists()){

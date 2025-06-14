@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ConnectionHandler {
 
@@ -170,5 +171,41 @@ public class ConnectionHandler {
             e.printStackTrace();
         }
         return id;
+    }
+
+    public static ArrayList<String> getUsernames(){
+        ArrayList<String> usernames = new ArrayList<>();
+
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            out.println("GETALLUSERNAMES");
+            System.out.println("<- Wysłano zapytanie o wszystkich użytkowników");
+            String response = in.readLine();
+            String[] parts = response.split(";");
+            usernames.addAll(Arrays.asList(parts));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return usernames;
+    }
+
+    public static void shareListToUser(int listID, String username){
+
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            out.println("SHARELIST$" + username + "$" + listID);
+            System.out.println("<- Wysłano prośbę o udostęwanie listy (id:" + listID + ") użytkownikowi: " + username);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

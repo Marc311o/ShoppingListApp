@@ -1,9 +1,7 @@
 package datamodel;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProductsList {
@@ -13,8 +11,8 @@ public class ProductsList {
     public boolean isBeingEdited;
     public ArrayList<Integer> UsersID;
     public ArrayList<String> Usernames;
-
     public ArrayList<Category> categories;
+
 
     public ProductsList() {
         this.categories = new ArrayList<>();
@@ -22,7 +20,9 @@ public class ProductsList {
         this.Usernames = new ArrayList<>();
     }
 
-    public Category znajdzKategorie(String name) {
+
+
+    public Category findCategory(String name) {
         for (Category k : categories) {
             if (k.name.equalsIgnoreCase(name)) {
                 return k;
@@ -32,8 +32,7 @@ public class ProductsList {
         categories.add(nowa);
         return nowa;
     }
-
-    public Product znajdzPozycje(String name, String category) {
+    public Product findProduct(String name, String category) {
         for (Category k : categories) {
             if (k.name.equalsIgnoreCase(category)) {
                 for (Product p : k.products) {
@@ -46,6 +45,125 @@ public class ProductsList {
         return null;
     }
 
+
+    public void addProduct(Product p) {
+        Product poz = findProduct(p.getName(), p.getCategory());
+        if (poz == null) {
+            findCategory(p.getCategory()).products.add(p);
+        } else {
+            if (poz.getType().equals("int")) {
+                poz.setQuantity(poz.getQuantity() + p.getQuantity());
+            } else {
+                poz.setAmount(poz.getAmount() + p.getAmount());
+            }
+
+        }
+    }
+    public void dropProduct(Product p) {
+        findCategory(p.getCategory()).products.remove(p);
+    }
+    public void clear() {
+        categories.clear();
+    }
+
+
+    // getters and setters
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isBeingEdited() {
+        return isBeingEdited;
+    }
+    public void setBeingEdited(boolean beingEdited) {
+        isBeingEdited = beingEdited;
+    }
+
+    public ArrayList<Category> getCategories() {
+        return categories;
+    }
+    public void setCategories(ArrayList<Category> categories) {
+        this.categories = categories;
+    }
+
+    public ArrayList<String> getUsernames() {
+        return Usernames;
+    }
+    public void setUsernames(ArrayList<String> usernames) {
+        Usernames = usernames;
+    }
+
+    public ArrayList<Integer> getUsersID() {
+        return UsersID;
+    }
+    public void setUsersID(ArrayList<Integer> usersID) {
+        UsersID = usersID;
+    }
+
+
+    // file handling
+    public static void saveProductLists(ArrayList<ProductsList> productsLists) {
+        for(ProductsList p : productsLists) {
+            String f = "lists/" + p.getId() + ".txt";
+            p.saveToFile(f);
+        }
+    }
+    public void saveToFile(String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+
+            writer.write(id + ";" + name + ";");
+            for (int i = 0; i < UsersID.size(); i++) {
+                if (i > 0) {
+                    writer.write(",");
+                }
+                writer.write(String.valueOf(UsersID.get(i)));
+            }
+
+            writer.newLine();
+
+            for (Category k : categories) {
+                for (Product p : k.products) {
+                    if (p.getType().equals("int")) {
+                        writer.write(p.getCategory() + ";" + p.getName() + ";" + p.getUnit() + ";" + p.getType() + ";" + p.getQuantity() + "\n");
+                    } else {
+                        writer.write(p.getCategory() + ";" + p.getName() + ";" + p.getUnit() + ";" + p.getType() + ";" + p.getAmount() + "\n");
+                    }
+
+                }
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Błąd zapisywania produktów: " + e.getMessage());
+        }
+    }
+    public static ArrayList<ProductsList> readProductLists(int max) {
+        ArrayList<ProductsList> productsLists = new ArrayList<>();
+        for(int i = 0; i < max; i++){
+            String filename = "lists/" + i + ".txt";
+
+            ProductsList newList = new ProductsList();
+            try{
+                newList.loadFromFile(filename);
+            }catch (FileNotFoundException e){
+                continue;
+            }
+            if(newList.getName() == null){
+                continue;
+            }
+            productsLists.add(newList);
+        }
+        return productsLists;
+    }
     public void loadFromFile(String filename) throws FileNotFoundException {
         isBeingEdited = true;
 
@@ -85,7 +203,7 @@ public class ProductsList {
                 }
 
                 Product p = new Product(nazwa, kategoria, jednostka, typ, iloscDouble);
-                znajdzKategorie(kategoria).products.add(p);
+                findCategory(kategoria).products.add(p);
             }
         } catch (IOException e) {
 //            System.err.println("Błąd wczytywania produktów: " + e.getMessage());
@@ -93,145 +211,33 @@ public class ProductsList {
         isBeingEdited = false;
     }
 
-    public void saveToFile(String filename) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
 
-            writer.write(id + ";" + name + ";");
-            for (int i = 0; i < UsersID.size(); i++) {
-                if (i > 0) {
-                    writer.write(",");
+    // SYNCH METODS
+    // lists -> users
+    public static void assignListsToUsers(ArrayList<User> users, ArrayList<ProductsList> allLists) {
+        // Tworzymy mapę ID użytkownika → obiekt User (dla szybszego dostępu)
+        Map<Integer, User> userMap = new HashMap<>();
+        for (User user : users) {
+            userMap.put(user.getId(), user);
+            // Wyczyść obecne dane, żeby nie dublować
+            user.getProductListsID().clear();
+            user.getProductLists().clear();
+        }
+
+        // Przypisz każdą listę do jej użytkowników
+        for (ProductsList list : allLists) {
+            for (Integer userId : list.getUsersID()) {
+                User user = userMap.get(userId);
+                if (user != null) {
+                    user.getProductListsID().add(list.getId());
+                    user.addProductLists(list);
+                } else {
+                    System.err.println("Brak użytkownika o ID: " + userId + " (lista ID: " + list.getId() + ")");
                 }
-                writer.write(String.valueOf(UsersID.get(i)));
-            }
-
-            writer.newLine();
-
-            for (Category k : categories) {
-                for (Product p : k.products) {
-                    if (p.getType().equals("int")) {
-                        writer.write(p.getCategory() + ";" + p.getName() + ";" + p.getUnit() + ";" + p.getType() + ";" + p.getQuantity() + "\n");
-                    } else {
-                        writer.write(p.getCategory() + ";" + p.getName() + ";" + p.getUnit() + ";" + p.getType() + ";" + p.getAmount() + "\n");
-                    }
-
-                }
-                writer.write("\n");
-            }
-        } catch (IOException e) {
-            System.err.println("Błąd zapisywania produktów: " + e.getMessage());
-        }
-    }
-
-    public void addProduct(Product p) {
-        Product poz = znajdzPozycje(p.getName(), p.getCategory());
-        if (poz == null) {
-            znajdzKategorie(p.getCategory()).products.add(p);
-        } else {
-            if (poz.getType().equals("int")) {
-                poz.setQuantity(poz.getQuantity() + p.getQuantity());
-            } else {
-                poz.setAmount(poz.getAmount() + p.getAmount());
-            }
-
-        }
-    }
-
-    public void dropProduct(Product p) {
-        znajdzKategorie(p.getCategory()).products.remove(p);
-    }
-
-    public void clear() {
-        categories.clear();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isBeingEdited() {
-        return isBeingEdited;
-    }
-
-    public void setBeingEdited(boolean beingEdited) {
-        isBeingEdited = beingEdited;
-    }
-
-    public ArrayList<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(ArrayList<Category> categories) {
-        this.categories = categories;
-    }
-
-    public void synchronizeUsernames(ArrayList<User> allUsers) {
-        if (UsersID == null) return;
-        Usernames = new ArrayList<>();
-
-        for (User user : allUsers) {
-            if (UsersID.contains(user.getId())) {
-                Usernames.add(user.getName());
             }
         }
     }
-
-    public String toString(int nr) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("- - lista " + nr + " - -\n");
-        sb.append("ID: " + id + "\n");
-        sb.append("Name: " + name + "\n");
-        sb.append("UsersId: " + UsersID + "\n");
-        sb.append("Usernames: " + Usernames + "\n");
-        for(Category k : categories) {
-            sb.append(k.name + ":\n");
-            for(Product p : k.products) {
-                sb.append("\t" + p.name + ": " + p.amount + "/" + p.quantity + "\n");
-            }
-
-        }
-        sb.append("- - - - - - - -\n");
-        return sb.toString();
-    }
-
-    public static ArrayList<ProductsList> readProductLists(int max) {
-        ArrayList<ProductsList> productsLists = new ArrayList<>();
-        for(int i = 0; i < max; i++){
-            String filename = "lists/" + i + ".txt";
-
-            ProductsList newList = new ProductsList();
-            try{
-                newList.loadFromFile(filename);
-            }catch (FileNotFoundException e){
-                continue;
-            }
-            if(newList.getName() == null){
-                continue;
-            }
-            productsLists.add(newList);
-        }
-        return productsLists;
-    }
-
-    public static void saveProductLists(ArrayList<ProductsList> productsLists) {
-        for(ProductsList p : productsLists) {
-            String f = "lists/" + p.getId() + ".txt";
-            p.saveToFile(f);
-        }
-    }
-
+    // users -> lists
     public static void updateGlobalListsFromUser(User user, ArrayList<ProductsList> allLists) {
 
         for (ProductsList userList : user.getProductLists()) {
@@ -250,7 +256,30 @@ public class ProductsList {
             }
         }
     }
+    // usersid -> usernames
+    public void synchronizeUsernames(ArrayList<User> allUsers) {
+        if (UsersID == null) return;
+        Usernames = new ArrayList<>();
 
+        for (User user : allUsers) {
+            if (UsersID.contains(user.getId())) {
+                Usernames.add(user.getName());
+            }
+        }
+    }
+    // usernames -> usersid
+    public void synchronizeIDs(ArrayList<User> allUsers){
+
+        UsersID = new ArrayList<>();
+        for (User user : allUsers) {
+            if (Usernames.contains(user.getName())) {
+                UsersID.add(user.getId());
+            }
+        }
+    }
+
+
+    // other
     public static int getNextAvailableListId(List<ProductsList> existingLists) {
         Set<Integer> usedIds = existingLists.stream()
                 .map(ProductsList::getId)
@@ -263,4 +292,24 @@ public class ProductsList {
         return id;
     }
 
+
+    // debugging
+    public String toString(int nr) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("- - lista " + nr + " - -\n");
+        sb.append("ID: " + id + "\n");
+        sb.append("Name: " + name + "\n");
+        sb.append("UsersId: " + UsersID + "\n");
+        sb.append("Usernames: " + Usernames + "\n");
+        for(Category k : categories) {
+            sb.append(k.name + ":\n");
+            for(Product p : k.products) {
+                sb.append("\t" + p.name + ": " + p.amount + "/" + p.quantity + "\n");
+            }
+
+        }
+        sb.append("- - - - - - - -\n");
+        return sb.toString();
+    }
 }
