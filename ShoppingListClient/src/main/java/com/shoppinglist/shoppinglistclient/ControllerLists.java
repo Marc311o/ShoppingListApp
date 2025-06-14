@@ -54,6 +54,20 @@ public class ControllerLists {
         toggleShared.setToggleGroup(listTypeGroup);
         toggleMy.setSelected(true);
 
+
+        toggleMy.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event -> {
+            if (toggleMy.isSelected()) {
+                event.consume(); // Zatrzymaj zdarzenie — nie pozwól na odkliknięcie
+            }
+        });
+
+        toggleShared.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, event -> {
+            if (toggleShared.isSelected()) {
+                event.consume();
+            }
+        });
+
+
         // toggle grupa list prywatnyvh i wspoldzielonych
         listTypeGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == null && oldToggle != null) {
@@ -98,18 +112,12 @@ public class ControllerLists {
         shareListBtn.disableProperty().unbind();
 
         User user = ConnectionHandler.refreshUserData();
-        productListTable.getItems().clear();
-        listList.getItems().clear();
+        reloadListofPrivateLists(user);
+
         quitListBtn.setDisable(true);
         deleteListBtn.setDisable(false);
         addListBtn.setDisable(false);
-        for (ProductsList list : user.getProductLists()){
 
-            if(list.getId() == 0) continue;
-            if(list.getUsersID().size() > 1) continue;
-
-            listList.getItems().add(list);
-        }
         deleteListBtn.disableProperty().bind(
                 listList.getSelectionModel().selectedItemProperty().isNull()
         );
@@ -130,20 +138,13 @@ public class ControllerLists {
         shareListBtn.disableProperty().unbind();
 
         User user = ConnectionHandler.refreshUserData();
-        listList.getItems().clear();
-        productListTable.getItems().clear();
+        reloadListofSharedLists(user);
+
         deleteListBtn.setDisable(true);
         addListBtn.setDisable(true);
         quitListBtn.setDisable(false);
 
-        for (ProductsList list : user.getProductLists()){
 
-            if(list.getId() == 0) continue;
-            if(list.getUsersID().size() < 2) continue;
-
-            listList.getItems().add(list);
-
-        }
         quitListBtn.disableProperty().bind(
                 listList.getSelectionModel().selectedItemProperty().isNull()
         );
@@ -227,7 +228,33 @@ public class ControllerLists {
 
     @FXML
     private void deleteListClicked(ActionEvent e) {
+        ProductsList list = listList.getSelectionModel().getSelectedItem();
+        System.out.println(list.getId());
+    }
 
+    private void reloadListofPrivateLists(User user){
+        listList.getItems().clear();
+        for (ProductsList list : user.getProductLists()){
+
+            if(list.getId() == 0) continue;
+            if(list.getUsersID().size() > 1) continue;
+
+            listList.getItems().add(list);
+        }
+        productListTable.getItems().clear();
+    }
+
+    private void reloadListofSharedLists(User user){
+        listList.getItems().clear();
+        for (ProductsList list : user.getProductLists()){
+
+            if(list.getId() == 0) continue;
+            if(list.getUsersID().size() < 2) continue;
+
+            listList.getItems().add(list);
+
+        }
+        productListTable.getItems().clear();
     }
 
 }
