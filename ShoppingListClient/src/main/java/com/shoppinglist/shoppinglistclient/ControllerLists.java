@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -257,7 +258,25 @@ public class ControllerLists {
 
     @FXML
     private void editListClicked(ActionEvent e) {
+        ConnectionHandler.setListState(listList.getSelectionModel().getSelectedItem().getId(), "BUSY");
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/editlist.fxml"));
+            Parent root = loader.load();
+
+            ControllerEditList controller = loader.getController();
+            // TODO
+
+            Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }finally {
+            ConnectionHandler.setListState(listList.getSelectionModel().getSelectedItem().getId(), "FREE");
+        }
     }
 
     @FXML
