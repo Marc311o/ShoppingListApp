@@ -91,6 +91,32 @@ public class User {
         }
         return users;
     }
+    public String parseUserToFileFormat(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(name + ";" + id + ";");
+
+        for (int i = 0; i < productListsID.size(); i++) {
+            sb.append(productListsID.get(i));
+            if (i < productListsID.size() - 1) {
+                sb.append(",");
+            }
+        }
+
+        return sb.toString();
+    }
+    public static void writeUsersToFile(String filename, ArrayList<User> users) {
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+
+            writer.write("#username#id#listy\n\n");
+            for(User user : users) {
+                writer.write(user.parseUserToFileFormat() + "\n");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Błąd zapisywania produktów: " + e.getMessage());
+        }
+    }
 
     // synch
     public static void refreshUsers(ArrayList<User> users, ArrayList<ProductsList> allLists) {

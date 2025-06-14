@@ -200,6 +200,7 @@ public class Main {
 
         ProductsList.updateGlobalListsFromUser(updatedUser, lists);
         ProductsList.saveProductLists(lists);
+        User.writeUsersToFile("users.txt", users);
         System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
     }
 
@@ -263,6 +264,9 @@ public class Main {
             ProductsList.assignListsToUsers(users, lists);
             User.refreshUsers(users, lists);
         }
+
+        User.writeUsersToFile("users.txt", users);
+        ProductsList.saveProductLists(lists);
 
         System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
         System.out.println(selecedUser);

@@ -1,1 +1,1 @@
-8;dzielona1;1
+8;dzielona1;1,2
