@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -126,7 +128,6 @@ public class ControllerLists {
         }
     }
 
-
     @FXML
     private void refreshTable() {
         ProductsList selectedList = listList.getSelectionModel().getSelectedItem();
@@ -167,6 +168,36 @@ public class ControllerLists {
 
         productListTable.getItems().setAll(products);
     }
+
+    @FXML
+    private void addListClicked(ActionEvent e) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/new_list_window.fxml"));
+            Parent root = loader.load();
+            ControllerNewListWindow controller = loader.getController();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Stwórz listę");
+            dialogStage.getIcons().add(new Image("/icon.png"));
+            dialogStage.setScene(new Scene(root));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.showAndWait();
+
+            ProductsList list = controller.getList();
+            if(list != null){
+                ProgramData.currentUser.getProductListsID().add(list.getId());
+                ProgramData.currentUser.getProductLists().add(list);
+            }
+
+            listList.getItems().add(list);
+            ConnectionHandler.sendUserData();
+
+        } catch (IOException event) {
+            event.printStackTrace();
+        }
+    }
+
 
 
 }

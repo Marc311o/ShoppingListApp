@@ -2,6 +2,9 @@ package datamodel;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProductsList {
 
@@ -246,6 +249,18 @@ public class ProductsList {
                 allLists.add(userList);
             }
         }
+    }
+
+    public static int getNextAvailableListId(List<ProductsList> existingLists) {
+        Set<Integer> usedIds = existingLists.stream()
+                .map(ProductsList::getId)
+                .collect(Collectors.toSet());
+
+        int id = 1;
+        while (usedIds.contains(id)) {
+            id++;
+        }
+        return id;
     }
 
 }

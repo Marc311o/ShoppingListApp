@@ -153,4 +153,22 @@ public class ConnectionHandler {
             e.printStackTrace();
         }
     }
+
+    public static int getUnusedId(){
+        int id = -1;
+        try (Socket socket = new Socket("localhost", SOCKET);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
+            out.println("GETUNUSEDLISTID");
+            System.out.println("<- Wysłano zapytanie o nieużywane id listy");
+            String response = in.readLine();
+            id = Integer.parseInt(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
 }

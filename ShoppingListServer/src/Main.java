@@ -115,6 +115,11 @@ public class Main {
                     String username = parts[1];
                     handleUserDataUpdateRequest(username, parts[2]);
                 }
+                case "GETUNUSEDLISTID" -> {
+                    int id = ProductsList.getNextAvailableListId(lists);
+                    out.println(id);
+                }
+
             }
 
 
