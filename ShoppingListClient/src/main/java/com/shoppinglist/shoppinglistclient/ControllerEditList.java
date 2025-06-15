@@ -77,12 +77,14 @@ public class ControllerEditList {
         if (selectedProduct != null) {
             selectedList.dropProduct(selectedProduct);
         }
+        refreshUserData();
         refreshTable();
     }
 
     @FXML
-    private void saveClicked() {
+    private void saveClicked(ActionEvent e) {
         ConnectionHandler.sendUserData();
+        goBack(e);
     }
 
     private void initPage(ProductsList list) {
@@ -148,6 +150,13 @@ public class ControllerEditList {
             products.addAll(cat.products);
         }
         productListTable.getItems().setAll(products);
+    }
+
+    private void refreshUserData(){
+        ProgramData.currentUser.getProductLists().removeIf(
+                l -> l.getId() == selectedList.getId()
+        );
+        ProgramData.currentUser.getProductLists().add(selectedList);
     }
 
 }

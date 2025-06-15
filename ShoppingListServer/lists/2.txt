@@ -1,5 +1,4 @@
 2;tygodniowa;1,3
-Chemia;Dezodorant;sztuki;int;0
 Chemia;Pasta do zębów;sztuki;int;1
 
 Motoryzacja;Płyn do spryskiwaczy;litry;double;1.5

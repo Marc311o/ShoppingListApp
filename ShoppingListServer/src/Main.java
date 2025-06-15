@@ -189,24 +189,34 @@ public class Main {
         }
     }
 
-    public static void handleUserDataUpdateRequest(String username, String json) {
-        System.out.println("<- Otrzymano dane użytkownika: " + username);
-//        System.out.println(json);
 
-        User updatedUser = parseUserFromJson(json);
+public static void handleUserDataUpdateRequest(String username, String json) {
+    User updatedUser = parseUserFromJson(json);
 
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getName().equalsIgnoreCase(username)) {
-                users.set(i, updatedUser);
-                break;
-            }
+    // 1. Zamień starego użytkownika na nowy obiekt
+    for (int i = 0; i < users.size(); i++) {
+        if (users.get(i).getName().equalsIgnoreCase(username)) {
+            users.set(i, updatedUser);
+            break;
         }
-
-        ProductsList.updateGlobalListsFromUser(updatedUser, lists);
-        ProductsList.saveProductLists(lists);
-        User.writeUsersToFile("users.txt", users);
-        System.out.println("- Zaktualizowano dane użytkownika: " + username + " -");
     }
+
+    // 2. Uaktualnij globalną listę produktów z obiektu użytkownika
+    ProductsList.updateGlobalListsFromUser(updatedUser, lists);
+
+    // 3. Upewnij się, że każda lista wie, kto ma do niej dostęp
+    synchronizeAll(users, lists);
+
+    // 4. Na podstawie synchronizacji przypisz listy do użytkowników
+    ProductsList.assignListsToUsers(users, lists);
+
+    // 5. Odśwież referencje list w obiektach użytkowników
+    User.refreshUsers(users, lists);
+
+    // 6. Zapisz nowe dane na dysk
+    ProductsList.saveProductLists(lists);
+    User.writeUsersToFile("users.txt", users);
+}
 
     public static User parseUserFromJson(String json) {
 
