@@ -11,11 +11,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ControllerEditList {
 
@@ -68,7 +72,40 @@ public class ControllerEditList {
 
     @FXML
     private void editAmountClicked() {
+        Product selectedProduct = productListTable.getSelectionModel().getSelectedItem();
+        if (selectedProduct == null) return;
 
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Edytuj ilość");
+        dialog.setHeaderText("Produkt: " + selectedProduct.getName());
+        dialog.setContentText("Nowa ilość (" + selectedProduct.getUnit() + "):");
+
+        String initial = selectedProduct.getType().equalsIgnoreCase("int")
+                ? String.valueOf(selectedProduct.getQuantity())
+                : String.format("%.1f", selectedProduct.getAmount());
+        dialog.getEditor().setText(initial);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(input -> {
+            try {
+                if (selectedProduct.getType().equalsIgnoreCase("int")) {
+                    int newQuant = Integer.parseInt(input);
+                    selectedProduct.setQuantity(newQuant);
+                } else {
+                    double newAmount = Double.parseDouble(input);
+                    selectedProduct.setAmount(newAmount);
+                }
+                refreshTable();
+                refreshUserData();
+                
+            } catch (NumberFormatException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd");
+                alert.setHeaderText("Niepoprawna wartość");
+                alert.setContentText("Wprowadź liczbę " + (selectedProduct.getType().equalsIgnoreCase("int") ? "całkowitą" : "zmiennoprzecinkową") + ".");
+                alert.showAndWait();
+            }
+        });
     }
 
     @FXML

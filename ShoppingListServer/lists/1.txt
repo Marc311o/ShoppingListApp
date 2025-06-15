@@ -3,5 +3,5 @@ Spożywcze;Chleb;sztuki;int;2
 Spożywcze;Masło;sztuki;int;3
 Spożywcze;Mleko;litry;double;1.0
 
-Chemia;Mydło;sztuki;int;1
+Chemia;Mydło;sztuki;int;2
 
