@@ -1,3 +1,5 @@
 10;urodziny kasi;2,1,3
 Spożywcze;Makaron;paczki;int;8
 
+Słodycze;Ciasteczka czek.;opakowania;int;5
+

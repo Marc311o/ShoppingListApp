@@ -67,7 +67,6 @@ public class User {
             String line;
             while ((line = br.readLine()) != null) {
 
-                // pomijapuste linie i komentarze
                 if (line.startsWith("#") || line.trim().isEmpty()) {
                     continue;
                 }

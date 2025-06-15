@@ -24,7 +24,6 @@ public class Main {
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
-        // Inicjalizacja danych
         users = User.readUsers("users.txt");
         lists = ProductsList.readProductLists(MAX_LISTS_SAVED);
 
@@ -39,15 +38,6 @@ public class Main {
             for(ProductsList list : user.getProductLists()){
                 list.synchronizeUsernames(users);
             }
-        }
-
-
-
-        for (User user : users) System.out.println(user.toString());
-
-        int i = 1;
-        for (ProductsList list : lists){
-            System.out.println(list.toString(i++));
         }
 
 
@@ -133,7 +123,6 @@ public class Main {
 
             }
 
-
         } catch (IOException e) {
             System.err.println("Błąd klienta: " + e.getMessage());
         } finally {
@@ -148,13 +137,10 @@ public class Main {
     public static String handleUserDataRequest(String username) {
         System.out.println("<- Otrzymano żądanie od: " + username);
 
-        // Znajdź użytkownika
         User user = findUser(username);
 
-        // Zamień na JSON i wyślij
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
-
 
         System.out.println(user != null
                 ? "-> Wysłano dane użytkownika: " + user.getName()
@@ -189,11 +175,9 @@ public class Main {
         }
     }
 
-
     public static void handleUserDataUpdateRequest(String username, String json) {
     User updatedUser = parseUserFromJson(json);
 
-    // 1. Zamień starego użytkownika na nowy obiekt
     for (int i = 0; i < users.size(); i++) {
         if (users.get(i).getName().equalsIgnoreCase(username)) {
             users.set(i, updatedUser);
@@ -201,19 +185,10 @@ public class Main {
         }
     }
 
-    // 2. Uaktualnij globalną listę produktów z obiektu użytkownika
     ProductsList.updateGlobalListsFromUser(updatedUser, lists);
-
-    // 3. Upewnij się, że każda lista wie, kto ma do niej dostęp
     synchronizeAll(users, lists);
-
-    // 4. Na podstawie synchronizacji przypisz listy do użytkowników
     ProductsList.assignListsToUsers(users, lists);
-
-    // 5. Odśwież referencje list w obiektach użytkowników
     User.refreshUsers(users, lists);
-
-    // 6. Zapisz nowe dane na dysk
     ProductsList.saveProductLists(lists);
     User.writeUsersToFile("users.txt", users);
 }
@@ -228,18 +203,14 @@ public class Main {
         Gson gson = new Gson();
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
 
-        // Parsuj imię i ID
         String name = jsonObject.get("name").getAsString();
         int id = jsonObject.get("id").getAsInt();
 
-        // Parsuj productListsID
         Type listIntType = new TypeToken<ArrayList<Integer>>() {}.getType();
         ArrayList<Integer> productListsID = gson.fromJson(jsonObject.get("productListsID"), listIntType);
 
-        // Utwórz użytkownika na podstawie konstruktora
         User user = new User(name, id, productListsID);
 
-        // Parsuj productLists (pełne obiekty)
         JsonElement productListsElement = jsonObject.get("productLists");
         if (productListsElement != null && productListsElement.isJsonArray()) {
             Type listProductsType = new TypeToken<ArrayList<ProductsList>>() {}.getType();
@@ -307,7 +278,7 @@ public class Main {
             User.refreshUsers(users, lists);
         }
 
-        synchronizeAll(users, lists); // jeśli masz spójną metodę nadrzędną
+        synchronizeAll(users, lists);
 
         User.writeUsersToFile("users.txt", users);
         ProductsList.saveProductLists(lists);
@@ -318,17 +289,13 @@ public class Main {
 
     public static void synchronizeAll(ArrayList<User> users, ArrayList<ProductsList> lists) {
 
-
-        // Uaktualnij usernames i usersID w każdej liście
         for (ProductsList list : lists) {
             list.synchronizeUsernames(users);
             list.synchronizeIDs(users);
         }
 
-        // Na podstawie list przypisz do użytkowników
         ProductsList.assignListsToUsers(users, lists);
 
-        // Odśwież referencje list w użytkownikach (po ID)
         User.refreshUsers(users, lists);
     }
 
