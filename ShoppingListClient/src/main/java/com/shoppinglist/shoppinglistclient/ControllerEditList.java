@@ -82,7 +82,7 @@ public class ControllerEditList {
 
     @FXML
     private void saveClicked() {
-
+        ConnectionHandler.sendUserData();
     }
 
     private void initPage(ProductsList list) {

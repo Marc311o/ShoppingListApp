@@ -134,10 +134,7 @@ public class ProductsList {
                         prod.getUnit().equalsIgnoreCase(p.getUnit()) &&
                         prod.getType().equalsIgnoreCase(p.getType())
         );
-
-        for (Product prod : cat.products) {
-            System.out.println(prod.getName());
-        }
+//        System.out.println("Usunięto: " + p.getName());
 
     }
 

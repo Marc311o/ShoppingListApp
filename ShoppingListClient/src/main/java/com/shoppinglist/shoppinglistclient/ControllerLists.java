@@ -259,24 +259,38 @@ public class ControllerLists {
     @FXML
     private void editListClicked(ActionEvent e) {
         ProductsList chosenList = listList.getSelectionModel().getSelectedItem();
-        ConnectionHandler.setListState(chosenList.getId(), "BUSY");
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/editlist.fxml"));
-            Parent root = loader.load();
+        if(!ConnectionHandler.isListBeingEdited(chosenList.getId())){
 
-            ControllerEditList controller = loader.getController();
-            controller.setSelectedList(chosenList);
+            ConnectionHandler.setListState(chosenList.getId(), "BUSY");
 
-            Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("view/editlist.fxml"));
+                Parent root = loader.load();
+
+                ControllerEditList controller = loader.getController();
+                controller.setSelectedList(chosenList);
+
+                Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
 
 
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Lista jest aktualnie edytowana");
+            alert.setContentText("Inny użytkownik właśnie edytuje tę listę. Spróbuj ponownie później.");
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image("/icon.png"));
+            // TODO: fix
+//            alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/style.css")).toExternalForm());
+            alert.showAndWait();
         }
     }
+
 
     @FXML
     private void quitListClicked(ActionEvent e) {
