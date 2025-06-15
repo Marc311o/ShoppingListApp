@@ -303,6 +303,8 @@ public class ControllerLists {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             ConnectionHandler.deleteListFromUser(list.getId(), ProgramData.currentUser.getName());
+            reloadListofSharedLists(ProgramData.currentUser);
+
         }
     }
 

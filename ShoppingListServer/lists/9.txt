@@ -1,1 +1,5 @@
 9;dzielona2;2
+Słodycze;Czekolada;sztuki;int;3
+Słodycze;Ciasteczka czek.;opakowania;int;4
+Słodycze;Batony;sztuki;int;5
+

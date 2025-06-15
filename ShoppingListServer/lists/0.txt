@@ -4,13 +4,48 @@ Spożywcze;Chleb;sztuki;int;0
 Spożywcze;Masło;sztuki;int;0
 Spożywcze;Mleko;litry;double;0.0
 Spożywcze;Makaron;paczki;int;0
+Spożywcze;Jajka;paczki;int;0
+Spożywcze;Ser żółty;sztuki;int;0
+Spożywcze;Ryż;kilogramy;double;0.0
+Spożywcze;Jogurt;sztuki;int;0
+Spożywcze;Oliwa;litry;double;0.0
 
 Chemia;Mydło;sztuki;int;1
 Chemia;Płyn do okien;sztuki;int;0
 Chemia;Dezodorant;sztuki;int;0
 Chemia;Pasta do zębów;sztuki;int;0
+Chemia;Proszek do prania;paczki;int;0
+Chemia;Płyn do naczyń;litry;double;0.0
+Chemia;Kostki do WC;sztuki;int;0
+Chemia;Chusteczki nawilżane;opakowania;int;0
 
 Motoryzacja;Płyn do spryskiwaczy;litry;double;0.0
+Motoryzacja;Olej silnikowy;litry;double;0.0
+Motoryzacja;Filtr oleju;sztuki;int;0
+Motoryzacja;Środek do czyszczenia felg;litry;double;0.0
 
 Słodycze;Żelki;paczki;int;0
+Słodycze;Czekolada;sztuki;int;0
+Słodycze;Ciasteczka czek.;opakowania;int;0
+Słodycze;Batony;sztuki;int;0
+
+Elektronika;Bateria AA;opakowania;int;0
+Elektronika;Powerbank;sztuki;int;0
+Elektronika;Kabel USB-C;sztuki;int;0
+Elektronika;Słuchawki;pary;int;0
+
+Biuro;Długopis;sztuki;int;0
+Biuro;Notatnik;sztuki;int;0
+Biuro;Zakreślacz;komplet;int;0
+Biuro;Toner do drukarki;sztuki;int;0
+
+Ogród;Nawóz.;opakowania;int;0
+Ogród;Ziemia;worki;int;0
+Ogród;Nasiona trawnika;opakowania;int;0
+Ogród;Środek na chwasty;litry;double;0.0
+
+Zdrowie;Witamina C;opakowania;int;0
+Zdrowie;Bandaż;szty;int;0
+Zdrowie;Termometr;sztuki;int;0
+Zdrowie;Plaster;role;int;0
 

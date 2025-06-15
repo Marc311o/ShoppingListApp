@@ -90,16 +90,13 @@ public class ControllerEditList {
             if (newProduct != null) {
                 selectedList.addProduct(newProduct);
                 refreshUserData();
+                ConnectionHandler.refreshUserData();
                 refreshTable();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 
 

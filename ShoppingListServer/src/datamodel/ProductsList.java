@@ -2,6 +2,7 @@ package datamodel;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ProductsList {
@@ -243,23 +244,60 @@ public class ProductsList {
         }
     }
     // users -> lists
-    public static void updateGlobalListsFromUser(User user, ArrayList<ProductsList> allLists) {
-        for (ProductsList userList : user.getProductLists()) {
-            boolean updated = false;
+//    public static void updateGlobalListsFromUser(User user, ArrayList<ProductsList> allLists) {
+//        for (ProductsList userList : user.getProductLists()) {
+//            boolean updated = false;
+//
+//            for (int i = 0; i < allLists.size(); i++) {
+//                if (allLists.get(i).getId() == userList.getId()) {
+//                    allLists.set(i, userList);
+//                    updated = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!updated) {
+//                allLists.add(userList);
+//            }
+//        }
+//    }
 
-            for (int i = 0; i < allLists.size(); i++) {
-                if (allLists.get(i).getId() == userList.getId()) {
-                    allLists.set(i, userList);
-                    updated = true;
-                    break;
+    public static void updateGlobalListsFromUser(User user, List<ProductsList> allLists) {
+        int userId = user.getId();
+
+        Map<Integer, ProductsList> userMap = user.getProductLists().stream()
+                .collect(Collectors.toMap(ProductsList::getId, Function.identity()));
+
+        Iterator<ProductsList> it = allLists.iterator();
+        while (it.hasNext()) {
+            ProductsList global = it.next();
+            int gid = global.getId();
+
+            if (userMap.containsKey(gid)) {
+                // użytkownik ma listę → aktualizujemy zawartość
+                ProductsList updated = userMap.get(gid);
+                global.setName(updated.getName());
+                global.setCategories(new ArrayList<>(updated.getCategories()));
+                global.setUsersID(new ArrayList<>(updated.getUsersID()));
+                global.setUsernames(new ArrayList<>(updated.getUsernames()));
+            } else {
+                // użytkownik usunął listę → usuwamy jego ID
+                if (global.getUsersID().removeIf(id -> id == userId)) {
+                    if (global.getUsersID().isEmpty()) {
+                        it.remove();
+                    }
                 }
             }
-
-            if (!updated) {
-                allLists.add(userList);
-            }
         }
+
+        // Dodajemy listy, które użytkownik ma, ale ich nie ma globalnie
+        userMap.keySet().stream()
+                .filter(id -> allLists.stream().noneMatch(gl -> gl.getId() == id))
+                .map(userMap::get)
+                .forEach(allLists::add);
     }
+
+
 
     // usersid -> usernames
     public void synchronizeUsernames(ArrayList<User> allUsers) {

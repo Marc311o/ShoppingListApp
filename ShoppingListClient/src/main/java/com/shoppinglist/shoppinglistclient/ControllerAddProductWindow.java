@@ -19,11 +19,13 @@ public class ControllerAddProductWindow {
     @FXML private Button AddProductBtn, CancelBtn;
     @FXML private ComboBox<String> categoryBox, productBox;
     @FXML private TextField amountField;
+    @FXML private Label unitLabel;
 
     @FXML
     public void initialize() {
         availableProductsList = ProgramData.admin.getProductLists().getFirst();
         categories = availableProductsList.getCategories();
+        unitLabel.setText("");
 
         for (Category cat : categories) {
             categoryBox.getItems().add(cat.name);
@@ -48,11 +50,14 @@ public class ControllerAddProductWindow {
                             productBox.setDisable(false);
                         });
             }
+
+
+        });
+        productBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updateUnitLabel(newVal);
+            updateAddButtonState();
         });
 
-        //TODO change unit label everytime user changes product
-
-        productBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> updateAddButtonState());
         amountField.textProperty().addListener((obs, oldVal, newVal) -> updateAddButtonState());
     }
 
@@ -61,6 +66,16 @@ public class ControllerAddProductWindow {
                 && productBox.getValue() != null
                 && !amountField.getText().trim().isEmpty();
         AddProductBtn.setDisable(!ok);
+    }
+
+    @FXML
+    private void updateUnitLabel(String prodName) {
+        if (prodName == null || categoryBox.getValue() == null) {
+            unitLabel.setText("");
+            return;
+        }
+        Product p = availableProductsList.znajdzPozycje(prodName, categoryBox.getValue());
+        unitLabel.setText(p != null ? p.getUnit() : "");
     }
 
     @FXML

@@ -190,7 +190,7 @@ public class Main {
     }
 
 
-public static void handleUserDataUpdateRequest(String username, String json) {
+    public static void handleUserDataUpdateRequest(String username, String json) {
     User updatedUser = parseUserFromJson(json);
 
     // 1. Zamień starego użytkownika na nowy obiekt

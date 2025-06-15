@@ -12,7 +12,7 @@
 
     <HBox alignment="CENTER" spacing="5">
         <TextField fx:id="amountField"  prefHeight="26.0" prefWidth="70.0" promptText="Ilość" />
-        <Label prefHeight="28.0" prefWidth="70.0" text="Unit" alignment="CENTER"/>
+        <Label fx:id="unitLabel" prefHeight="28.0" prefWidth="70.0" text="unit" alignment="CENTER"/>
     </HBox>
 
 

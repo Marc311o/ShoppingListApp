@@ -2,4 +2,5 @@
 Spożywcze;Chleb;sztuki;int;2
 Spożywcze;Masło;sztuki;int;3
 Spożywcze;Mleko;litry;double;2.0
+Spożywcze;Ryż;kilogramy;double;1.0
 

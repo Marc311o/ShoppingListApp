@@ -1,1 +1,7 @@
-8;dzielona1;1,2
+8;dzielona1;1
+Elektronika;Kabel USB-C;sztuki;int;1
+
+Ogród;Nasiona trawnika;opakowania;int;2
+
+Słodycze;Ciasteczka;opakowania;int;2
+

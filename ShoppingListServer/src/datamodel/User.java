@@ -96,7 +96,6 @@ public class User {
     public String parseUserToFileFormat(){
         StringBuilder sb = new StringBuilder();
         sb.append(name + ";" + id + ";");
-        sb.append("0,");
         for (int i = 0; i < productListsID.size(); i++) {
             sb.append(productListsID.get(i));
             if (i < productListsID.size() - 1) {

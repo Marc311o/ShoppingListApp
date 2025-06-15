@@ -30,7 +30,7 @@ public class ControllerNewProductWindow {
         intRadio.setToggleGroup(typeGroup);
         doubleRadio.setToggleGroup(typeGroup);
 
-        ProductsList list = ProgramData.currentUser.productLists.getFirst();
+        ProductsList list = ProgramData.admin.productLists.getFirst();
         ArrayList<String> cats = new ArrayList<>();
         for(Category cat : list.getCategories()) {
             cats.add(cat.name);

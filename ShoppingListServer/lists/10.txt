@@ -1,0 +1,3 @@
+10;urodziny kasi;2,1,3
+Spożywcze;Makaron;paczki;int;8
+
