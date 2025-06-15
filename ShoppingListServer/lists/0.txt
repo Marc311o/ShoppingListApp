@@ -14,3 +14,4 @@ Motoryzacja;Płyn do spryskiwaczy;litry;double;0.0
 
 Słodycze;Żelki;paczki;int;0
 
+

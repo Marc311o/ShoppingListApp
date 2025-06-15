@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.shoppinglist.shoppinglistclient.view.AddproductWindow"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox alignment="CENTER" spacing="10" stylesheets="@styles/style.css, @styles/newprod_style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shoppinglist.shoppinglistclient.ControllerAddProductWindow">
 
-</AnchorPane>
+    <Label text="Dodaj nowy produkt" />
+
+    <ComboBox fx:id="categoryBox" prefHeight="26.0" prefWidth="150.0" promptText="Wybierz kategorię" />
+    <ComboBox fx:id="productBox" prefHeight="26.0" prefWidth="150.0" promptText="Wybierz produkt" />
+
+    <HBox alignment="CENTER" spacing="5">
+        <TextField fx:id="amountField" onKeyReleased="#handleKeyReleased" prefHeight="26.0" prefWidth="70.0" promptText="Ilość" />
+        <Label prefHeight="28.0" prefWidth="70.0" text="Unit" alignment="CENTER"/>
+    </HBox>
+
+
+
+    <HBox alignment="CENTER" spacing="5">
+        <Button fx:id="AddProductBtn" onAction="#handleAdd" text="Dodaj" />
+        <Button fx:id="CancelBtn" onAction="#handleCancel" text="Anuluj" />
+    </HBox>
+
+</VBox>

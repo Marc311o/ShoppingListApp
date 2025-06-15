@@ -14,11 +14,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class ControllerEditList {
@@ -42,7 +42,7 @@ public class ControllerEditList {
     // instead of initialize bcs of data transfer
     public void setSelectedList(ProductsList list) {
         this.selectedList = list;
-        initPage(list);
+        initPage();
 
 
 
@@ -68,7 +68,46 @@ public class ControllerEditList {
     @FXML
     private void addProductClicked() {
 
+        boolean availableListExists = false;
+
+        for (ProductsList list : ProgramData.currentUser.getProductLists()) {
+            if (list.getId() == 0) {
+                availableListExists = true;
+            }
+        }
+        if(availableListExists) {
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("view/addproduct_window.fxml"));
+                Parent root = loader.load();
+                ControllerAddProductWindow controller = loader.getController();
+
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Dodaj produkt");
+                dialogStage.getIcons().add(new Image("/icon.png"));
+                dialogStage.setScene(new Scene(root));
+                dialogStage.initModality(Modality.APPLICATION_MODAL);
+                dialogStage.showAndWait();
+
+                Product newProduct = controller.getResultProduct();
+                if (newProduct != null) {
+                    selectedList.addProduct(newProduct);
+                    refreshUserData();
+                    refreshTable();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+
+
     }
+
+
 
     @FXML
     private void editAmountClicked() {
@@ -97,12 +136,14 @@ public class ControllerEditList {
                 }
                 refreshTable();
                 refreshUserData();
-                
+
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Błąd");
                 alert.setHeaderText("Niepoprawna wartość");
-                alert.setContentText("Wprowadź liczbę " + (selectedProduct.getType().equalsIgnoreCase("int") ? "całkowitą" : "zmiennoprzecinkową") + ".");
+                alert.setContentText("Wprowadź liczbę " + (selectedProduct.getType().equalsIgnoreCase("int") ?
+                        "całkowitą" :
+                        "zmiennoprzecinkową (format x.x, np 1.5)") + ".");
                 alert.showAndWait();
             }
         });
@@ -120,11 +161,11 @@ public class ControllerEditList {
 
     @FXML
     private void saveClicked(ActionEvent e) {
-        ConnectionHandler.sendUserData();
+        ConnectionHandler.sendUserData(ProgramData.currentUser);
         goBack(e);
     }
 
-    private void initPage(ProductsList list) {
+    private void initPage() {
 
         // labels
         listNameLabel.setText(selectedList.toString());
@@ -149,7 +190,7 @@ public class ControllerEditList {
                 if (empty || getTableRow() == null || getTableRow().getItem() == null) {
                     setText(null);
                 } else {
-                    Product product = (Product) getTableRow().getItem();
+                    Product product = getTableRow().getItem();
                     if (product.getType().equalsIgnoreCase("int")) {
                         setText(String.valueOf(product.getQuantity()));
                     } else {

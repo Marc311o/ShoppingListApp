@@ -90,7 +90,8 @@ public class ControllerAvailableProducts {
 
     private ObservableList<Product> fetchProducts() {
         ObservableList<Product> products = FXCollections.observableArrayList();
-        User user = ConnectionHandler.getUser(ProgramData.currentUser.getName());
+        User user = ConnectionHandler.getUser("admin");
+        ProgramData.admin = user;
         ProductsList available = user.getProductLists().getFirst();
 
         for(Category cat : available.getCategories()) {
@@ -143,7 +144,7 @@ public class ControllerAvailableProducts {
 
     @FXML
     private void saveListBtnClick() {
-        ConnectionHandler.sendUserData();
+        ConnectionHandler.sendUserData(ProgramData.admin);
         editMode = false;
         setEditModeVisibility(false);
         ConnectionHandler.setListState(0, "FREE");
@@ -152,7 +153,7 @@ public class ControllerAvailableProducts {
     @FXML
     private void deleteProductBtnClick() {
         Product selectedProduct = availableProductsTable.getSelectionModel().getSelectedItem();
-        ProductsList list = ProgramData.currentUser.getProductLists().getFirst();
+        ProductsList list = ProgramData.admin.getProductLists().getFirst();
         list.dropProduct(selectedProduct);
         availableProductsTable.getItems().remove(selectedProduct);
 
@@ -174,7 +175,7 @@ public class ControllerAvailableProducts {
 
             Product newProduct = controller.getResultProduct();
             if (newProduct != null) {
-                ProductsList list = ProgramData.currentUser.getProductLists().getFirst();
+                ProductsList list = ProgramData.admin.getProductLists().getFirst();
                 list.addProduct(newProduct);
                 availableProductsTable.getItems().add(newProduct);
             }

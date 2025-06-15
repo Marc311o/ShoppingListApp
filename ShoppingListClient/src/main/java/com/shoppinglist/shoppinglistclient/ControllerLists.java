@@ -221,7 +221,7 @@ public class ControllerLists {
             }
 
             listList.getItems().add(list);
-            ConnectionHandler.sendUserData();
+            ConnectionHandler.sendUserData(ProgramData.currentUser);
 
         } catch (IOException event) {
             event.printStackTrace();
@@ -249,7 +249,7 @@ public class ControllerLists {
                     ProgramData.currentUser.getProductLists().remove(i);
                 }
             }
-            ConnectionHandler.sendUserData();
+            ConnectionHandler.sendUserData(ProgramData.currentUser);
             reloadListofPrivateLists(ProgramData.currentUser);
         }
 
