@@ -175,7 +175,7 @@ public class Main {
         return response;
     }
 
-    public static void handleListSetStateRequest(int id, String state) {
+    public static void handleListSetStateRequest(int id, String state){
         for(ProductsList list : lists){
             if(list.getId() == id){
                if(state.equals("BUSY")){

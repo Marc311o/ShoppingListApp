@@ -258,14 +258,15 @@ public class ControllerLists {
 
     @FXML
     private void editListClicked(ActionEvent e) {
-        ConnectionHandler.setListState(listList.getSelectionModel().getSelectedItem().getId(), "BUSY");
+        ProductsList chosenList = listList.getSelectionModel().getSelectedItem();
+        ConnectionHandler.setListState(chosenList.getId(), "BUSY");
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/editlist.fxml"));
             Parent root = loader.load();
 
             ControllerEditList controller = loader.getController();
-            // TODO
+            controller.setSelectedList(chosenList);
 
             Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -274,8 +275,6 @@ public class ControllerLists {
 
         } catch (IOException ex) {
             throw new RuntimeException(ex);
-        }finally {
-            ConnectionHandler.setListState(listList.getSelectionModel().getSelectedItem().getId(), "FREE");
         }
     }
 
