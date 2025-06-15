@@ -11,7 +11,7 @@
     <ComboBox fx:id="productBox" prefHeight="26.0" prefWidth="150.0" promptText="Wybierz produkt" />
 
     <HBox alignment="CENTER" spacing="5">
-        <TextField fx:id="amountField" onKeyReleased="#handleKeyReleased" prefHeight="26.0" prefWidth="70.0" promptText="Ilość" />
+        <TextField fx:id="amountField"  prefHeight="26.0" prefWidth="70.0" promptText="Ilość" />
         <Label prefHeight="28.0" prefWidth="70.0" text="Unit" alignment="CENTER"/>
     </HBox>
 

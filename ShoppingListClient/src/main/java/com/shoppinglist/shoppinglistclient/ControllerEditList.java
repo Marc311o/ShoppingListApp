@@ -68,38 +68,33 @@ public class ControllerEditList {
     @FXML
     private void addProductClicked() {
 
-        boolean availableListExists = false;
-
-        for (ProductsList list : ProgramData.currentUser.getProductLists()) {
-            if (list.getId() == 0) {
-                availableListExists = true;
-            }
+        ProgramData.admin = ConnectionHandler.getUser("admin");
+        if(ProgramData.admin == null) {
+            return;
         }
-        if(availableListExists) {
 
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("view/addproduct_window.fxml"));
-                Parent root = loader.load();
-                ControllerAddProductWindow controller = loader.getController();
 
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Dodaj produkt");
-                dialogStage.getIcons().add(new Image("/icon.png"));
-                dialogStage.setScene(new Scene(root));
-                dialogStage.initModality(Modality.APPLICATION_MODAL);
-                dialogStage.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/addproduct_window.fxml"));
+            Parent root = loader.load();
+            ControllerAddProductWindow controller = loader.getController();
 
-                Product newProduct = controller.getResultProduct();
-                if (newProduct != null) {
-                    selectedList.addProduct(newProduct);
-                    refreshUserData();
-                    refreshTable();
-                }
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Dodaj produkt");
+            dialogStage.getIcons().add(new Image("/icon.png"));
+            dialogStage.setScene(new Scene(root));
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.showAndWait();
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            Product newProduct = controller.getResultProduct();
+            if (newProduct != null) {
+                selectedList.addProduct(newProduct);
+                refreshUserData();
+                refreshTable();
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 

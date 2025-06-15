@@ -8,43 +8,100 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerAddProductWindow {
 
     private Product resultProduct;
     private ProductsList availableProductsList;
+    private List<Category> categories;
 
     @FXML private Button AddProductBtn, CancelBtn;
     @FXML private ComboBox<String> categoryBox, productBox;
     @FXML private TextField amountField;
 
-
-
-
     @FXML
     public void initialize() {
+        availableProductsList = ProgramData.admin.getProductLists().getFirst();
+        categories = availableProductsList.getCategories();
 
-        for (ProductsList list : ProgramData.currentUser.getProductLists()) {
-            if (list.getId() == 0) {
-                availableProductsList = list;
-            }
-        }
-
-        ArrayList<String> cats = new ArrayList<>();
-
-        for(Category cat : availableProductsList.getCategories()) {
-            cats.add(cat.name);
+        for (Category cat : categories) {
+            categoryBox.getItems().add(cat.name);
         }
 
         AddProductBtn.setDisable(true);
-        categoryBox.getItems().addAll(cats);
+        productBox.setDisable(true);
 
+        categoryBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            productBox.getItems().clear();
+            productBox.setDisable(true);
+            AddProductBtn.setDisable(true);
+
+            if (newVal != null) {
+                categories.stream()
+                        .filter(c -> c.name.equals(newVal))
+                        .findFirst()
+                        .ifPresent(cat -> {
+                            for (Product p : cat.getProducts()) {
+                                productBox.getItems().add(p.name);
+                            }
+                            productBox.setDisable(false);
+                        });
+            }
+        });
+
+        //TODO change unit label everytime user changes product
+
+        productBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> updateAddButtonState());
+        amountField.textProperty().addListener((obs, oldVal, newVal) -> updateAddButtonState());
+    }
+
+    private void updateAddButtonState() {
+        boolean ok = categoryBox.getValue() != null
+                && productBox.getValue() != null
+                && !amountField.getText().trim().isEmpty();
+        AddProductBtn.setDisable(!ok);
     }
 
     @FXML
     private void handleAdd() {
+        String catName = categoryBox.getValue();
+        String prodName = productBox.getValue();
+        String input = amountField.getText().trim();
 
-//        Product newProduct = new Product()
+//        System.out.println( catName + " " + prodName + " " + input);
+
+        Product target = availableProductsList.znajdzPozycje(prodName, catName);
+        resultProduct = new Product(prodName, catName, target.getUnit(), target.getType(), 0);
+
+
+        try {
+            if ("int".equalsIgnoreCase(target.getType())) {
+                int qty = Integer.parseInt(input);
+                resultProduct.setQuantity(qty);
+            } else {
+                double amt = Double.parseDouble(input);
+                resultProduct.setAmount(amt);
+            }
+
+            ((Stage) categoryBox.getScene().getWindow()).close();
+
+        } catch (NumberFormatException ex) {
+            String expected = "int".equalsIgnoreCase(target.getType())
+                    ? "liczbę całkowitą (np. 3)"
+                    : "liczbę zmiennoprzecinkową (np. 1.5)";
+            showError("Niepoprawny format", "Wartość musi być " + expected + ".");
+        }
+
+
+    }
+
+    private void showError(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @FXML
@@ -53,18 +110,6 @@ public class ControllerAddProductWindow {
         ((Stage) categoryBox.getScene().getWindow()).close();
     }
 
-    @FXML
-//    private void handleKeyReleased() {
-//        AddProductBtn.setDisable(!isCategorySelected() || amountField.getText().isEmpty() || unitField.getText().isEmpty());
-//    }
-
-//    private boolean isCategorySelected() {
-////        if ("Inna".equals(categoryBox.getValue())) {
-////            return !customCategoryField.getText().trim().isEmpty();
-////        } else {
-////            return categoryBox.getValue() != null && !categoryBox.getValue().trim().isEmpty();
-////        }
-//    }
 
 
     public Product getResultProduct() {

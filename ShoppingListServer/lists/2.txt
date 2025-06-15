@@ -3,3 +3,5 @@ Chemia;Pasta do zębów;sztuki;int;1
 
 Motoryzacja;Płyn do spryskiwaczy;litry;double;1.5
 
+Spożywcze;Makaron;paczki;int;4
+

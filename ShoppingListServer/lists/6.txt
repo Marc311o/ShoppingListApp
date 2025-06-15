@@ -4,4 +4,5 @@ Chemia;Środek do czyszczenia łazienek;mililitry;double;500.0
 
 Motoryzacja;Akumulator;sztuki;int;1
 Motoryzacja;Zestaw żarówek;sztuki;int;10
+Motoryzacja;Płyn do spryskiwaczy;litry;double;2.0
 

@@ -34,7 +34,7 @@ public class ConnectionHandler {
 
             // Odbieranie JSON-a i konwersja do obiektu User
             String json = in.readLine();
-            System.out.println("-> Odebrano JSON: " + json);
+//            System.out.println("-> Odebrano JSON: " + json);
 
             if(!json.equals("null")) {
                 user = parseUserFromJson(json);
